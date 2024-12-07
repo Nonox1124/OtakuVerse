@@ -11,7 +11,7 @@ import SwiftUI
 struct OtakuVerseApp: App {
     var body: some Scene {
         WindowGroup {
-            HomePage()
+            HomePage(currentPage: "HomePage")
         }
     }
 }
