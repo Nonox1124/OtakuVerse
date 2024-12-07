@@ -10,6 +10,7 @@ import SwiftUI
 struct HomePage: View {
     
     @State private var searchText: String = ""
+    @State var currentPage: String
     @State private var works = ["salut", "hi", "Hello", "test"]
     
     var body: some View {
@@ -18,16 +19,12 @@ struct HomePage: View {
                 Color.darkBlue.ignoresSafeArea()
                 ScrollView {
                     ForEach(self.works, id: \.self) { work in
-                        CardView()
+                        CardHomePageModel()
                     }
                 }
                 .searchable(text: $searchText)
+                .withToolBarModel(currentPage: currentPage)
                 .toolbar {
-                    ToolbarItem(placement: .navigation) {
-                        Menu("Menu", systemImage: "line.3.horizontal.circle") {
-                            Text("Navigation List")
-                        }
-                    }
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu("Information", systemImage: "info.circle") {
                             Text("Total works: 0")
@@ -35,23 +32,13 @@ struct HomePage: View {
                             Text("Total unread chapters: 0")
                         }
                     }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Menu("Filters", systemImage: "line.3.horizontal.decrease.circle") {
-                            Text("Filter 1")
-                            Text("Filter 2")
-                        }
-                    }
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("User Account Button", systemImage: "person.crop.circle") {
-                            print("User Page")
-                        }
-                    }
                 }
             }
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
 
 #Preview {
-    HomePage()
+    HomePage(currentPage: "HomePage")
 }
