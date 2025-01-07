@@ -36,13 +36,7 @@ func LoadConfig(configFile, filePath string) error {
             panic(err)
         }
     }
-    viper.SetDefault("ENV", "DEV")
-    viper.SetDefault("LISTENADDR", "0.0.0.0")
-    viper.SetDefault("LISTENPORT", "8080")
-    viper.SetDefault("GINTRUSTEDPROXIES", []string{"127.0.0.1"})
-    viper.AutomaticEnv() // override from env
-    // inject viper values into config object to avoid replacing calls to config by viper everywhere
-    // should replace it later
+    viper.AutomaticEnv()
     config := GetConfig()
     viper.Unmarshal(&config)
     return nil
