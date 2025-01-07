@@ -4,8 +4,8 @@ info:
   description: API for OtakuVerse
   version: 1.0.0
 servers:
-- url: http://localhost:8080
-  description: Development server
+  - url: http://localhost:8080
+    description: Development server
 paths:
   /credentials/user:
     get:
@@ -57,7 +57,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 'Ok'
+                example: Ok
     patch:
       summary: Update the user's credentials
       operationId: PatchCredentialsUser
@@ -81,7 +81,6 @@ paths:
         - user
       parameters:
         - $ref: '#/components/parameters/username'
-
       responses:
         '200':
           description: List of works
@@ -97,34 +96,34 @@ paths:
                       example: 1
                     title:
                       type: string
-                      example: 'Solo Leveling'
+                      example: Solo Leveling
                     author:
                       type: string
-                      example: 'Chugong'
+                      example: Chugong
                     status:
                       type: string
-                      example: 'Ongoing'
+                      example: Ongoing
                     synopsis:
                       type: string
-                      example: 'This is a synopsis'
+                      example: This is a synopsis
                     number_of_chapters:
                       type: integer
                       example: 200
                     type:
                       type: string
-                      example: 'Manga'
+                      example: Manga
                     category:
                       type: string
-                      example: 'Shonen'
+                      example: Shonen
                     genre:
                       type: string
-                      example: 'Action-Fantasy-Adventure'
+                      example: Action-Fantasy-Adventure
                     current_chapter:
                       type: integer
                       example: 100
                     appreciate_book:
                       type: integer
-                      example: 'Like'
+                      example: Like
   /user/{username}/work/{id_of_book}:
     delete:
       summary: Delete the work of the user
@@ -141,7 +140,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 'Ok'
+                example: Ok
     patch:
       summary: Update the work of the user
       operationId: PatchUserWork
@@ -166,7 +165,7 @@ paths:
                   example: 100
                 appreciate_book:
                   type: integer
-                  example: 'Like'
+                  example: Like
       responses:
         '200':
           shema:
@@ -174,7 +173,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 'Ok'
+                example: Ok
   /works/{title}:
     get:
       summary: Get 5 works which have some similitude
@@ -203,7 +202,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 'Ok'
+                example: Ok
   /works/create:
     post:
       summary: Create a new work
@@ -224,7 +223,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 'Ok'
+                example: Ok
   /authors:
     get:
       summary: Get all of the authors
@@ -236,7 +235,7 @@ paths:
           type: array
           items:
             type: string
-            example: 'Chugong'
+            example: Chugong
     post:
       summary: Create a new author
       operationId: PostAuthor
@@ -254,7 +253,7 @@ paths:
               properties:
                 name:
                   type: string
-                  example: 'Chugong'
+                  example: Chugong
       responses:
         '200':
           schema:
@@ -262,7 +261,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 'Ok'
+                example: Ok
     delete:
       summary: Delete the author
       operationId: DeleteAuthor
@@ -280,7 +279,7 @@ paths:
               properties:
                 name:
                   type: string
-                  example: 'Chugong'
+                  example: Chugong
       responses:
         '200':
           shema:
@@ -288,7 +287,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 'Ok'
+                example: Ok
 components:
   parameters:
     username:
@@ -329,13 +328,13 @@ components:
       properties:
         email:
           type: string
-          example: 'roger.rubber@plouf.pf'
+          example: roger.rubber@plouf.pf
         password:
           type: string
-          example: 'password'
+          example: password
         username:
           type: string
-          example: 'Roger'
+          example: Roger
     Work:
       type: object
       required:
@@ -352,34 +351,34 @@ components:
       properties:
         title:
           type: string
-          example: 'Solo Leveling'
+          example: Solo Leveling
         author:
           type: string
-          example: 'Chugong'
+          example: Chugong
         status:
           type: string
-          example: 'Ongoing'
+          example: Ongoing
         synopsis:
           type: string
-          example: 'This is a synopsis'
+          example: This is a synopsis
         number_of_chapters:
           type: integer
           example: 200
         type:
           type: string
-          example: 'Manga'
+          example: Manga
         category:
           type: string
-          example: 'Shonen'
+          example: Shonen
         genre:
           type: string
-          example: 'Action-Fantasy-Adventure'
+          example: Action-Fantasy-Adventure
         url:
           type: string
-          example: 'https://www.ger.com'
+          example: https://www.ger.com
         image_url:
           type: string
-          example: 'https://www.ger.com'
+          example: https://www.ger.com
   responses:
     Token:
       description: Token of the user
@@ -390,7 +389,7 @@ components:
             properties:
               token:
                 type: string
-                example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
     Work:
       description: All of the work's informations
       content:
@@ -403,25 +402,25 @@ components:
                 example: 1
               title:
                 type: string
-                example: 'Solo Leveling'
+                example: Solo Leveling
               author:
                 type: string
-                example: 'Chugong'
+                example: Chugong
               status:
                 type: string
-                example: 'Ongoing'
+                example: Ongoing
               synopsis:
                 type: string
-                example: 'This is a synopsis'
+                example: This is a synopsis
               number_of_chapters:
                 type: integer
                 example: 200
               type:
                 type: string
-                example: 'Manga'
+                example: Manga
               category:
                 type: string
-                example: 'Shonen'
+                example: Shonen
               genre:
                 type: string
-                example: 'Action-Fantasy-Adventure'
+                example: Action-Fantasy-Adventure
