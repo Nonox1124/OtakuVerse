@@ -4,18 +4,14 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-func HelperGetCredentialsUser(c *gin.Context) {
+func HelperGetAuthors(c *gin.Context) {
     // non implemented func
 }
 
-func HelperPostCredentialsUser(c *gin.Context) {
+func HelperPostAuthor(c *gin.Context) {
     // non implemented func
 }
 
-func HelperDeleteCredentialsUser(c *gin.Context) {
-    // non implemented func
-}
-
-func HelperPatchCredentialsUser(c *gin.Context) {
+func HelperDeleteAuthor(c *gin.Context) {
     // non implemented func
 }
