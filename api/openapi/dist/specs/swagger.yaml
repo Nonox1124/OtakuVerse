@@ -1,0 +1,426 @@
+openapi: 3.0.0
+info:
+  title: OtakuVerse API
+  description: API for OtakuVerse
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Development server
+paths:
+  /credentials/user:
+    get:
+      summary: Get the token and check connection
+      operationId: GetCredentialsConnect
+      tags:
+        - credentials
+      requestBody:
+        required: true
+        description: Credentials of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          $ref: '#/components/responses/Token'
+    post:
+      summary: Create a new user with his own table
+      operationId: PostCredentialsUser
+      tags:
+        - credentials
+      requestBody:
+        required: true
+        description: Credentials of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          $ref: '#/components/responses/Token'
+    delete:
+      summary: Delete the user and his own table
+      operationId: DeleteCredentialsUser
+      tags:
+        - credentials
+      requestBody:
+        required: true
+        description: Credentials of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+    patch:
+      summary: Update the user's credentials
+      operationId: PatchCredentialsUser
+      tags:
+        - credentials
+      requestBody:
+        required: true
+        description: Credentials of the user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          $ref: '#/components/responses/Token'
+  /user/{username}:
+    get:
+      summary: Get the user's works list
+      operationId: GetUserWorks
+      tags:
+        - user
+      parameters:
+        - $ref: '#/components/parameters/username'
+      responses:
+        '200':
+          description: List of works
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id_of_book:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: Solo Leveling
+                    author:
+                      type: string
+                      example: Chugong
+                    status:
+                      type: string
+                      example: Ongoing
+                    synopsis:
+                      type: string
+                      example: This is a synopsis
+                    number_of_chapters:
+                      type: integer
+                      example: 200
+                    type:
+                      type: string
+                      example: Manga
+                    category:
+                      type: string
+                      example: Shonen
+                    genre:
+                      type: string
+                      example: Action-Fantasy-Adventure
+                    current_chapter:
+                      type: integer
+                      example: 100
+                    appreciate_book:
+                      type: integer
+                      example: Like
+  /user/{username}/work/{id_of_book}:
+    delete:
+      summary: Delete the work of the user
+      operationId: DeleteUserWork
+      parameters:
+        - $ref: '#/components/parameters/username'
+        - $ref: '#/components/parameters/id_of_book'
+      tags:
+        - user
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+    patch:
+      summary: Update the work of the user
+      operationId: PatchUserWork
+      parameters:
+        - $ref: '#/components/parameters/username'
+        - $ref: '#/components/parameters/id_of_book'
+      tags:
+        - user
+      requestBody:
+        required: true
+        description: Current chapter and the enum of appraciation
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - current_chapter
+                - appreciate_book
+              properties:
+                current_chapter:
+                  type: integer
+                  example: 100
+                appreciate_book:
+                  type: integer
+                  example: Like
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+  /works/{title}:
+    get:
+      summary: Get 5 works which have some similitude
+      operationId: GetWorks
+      tags:
+        - works
+      parameters:
+        - $ref: '#/components/parameters/title'
+      responses:
+        '200':
+          type: array
+          items:
+            $ref: '#/components/responses/Work'
+  /works/{id}:
+    delete:
+      summary: Delete the work and delete in the user's table
+      operationId: DeleteWork
+      tags:
+        - works
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+  /works/create:
+    post:
+      summary: Create a new work
+      operationId: PostWork
+      tags:
+        - works
+      requestBody:
+        required: true
+        description: Informations of the work
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Work'
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+  /authors:
+    get:
+      summary: Get all of the authors
+      operationId: GetAuthors
+      tags:
+        - authors
+      responses:
+        '200':
+          type: array
+          items:
+            type: string
+            example: Chugong
+    post:
+      summary: Create a new author
+      operationId: PostAuthor
+      tags:
+        - authors
+      requestBody:
+        required: true
+        description: Name of the author
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  example: Chugong
+      responses:
+        '200':
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+    delete:
+      summary: Delete the author
+      operationId: DeleteAuthor
+      tags:
+        - authors
+      requestBody:
+        required: true
+        description: Name of the author
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  example: Chugong
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+components:
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      description: username
+      schema:
+        type: string
+    id_of_book:
+      name: id_of_book
+      in: path
+      required: true
+      description: The ID of the book
+      schema:
+        type: integer
+    title:
+      name: title
+      in: path
+      required: true
+      description: title of the book
+      schema:
+        type: string
+    id:
+      name: id
+      in: path
+      required: true
+      description: ID
+      schema:
+        type: integer
+  schemas:
+    Credentials:
+      type: object
+      required:
+        - email
+        - username
+        - password
+      properties:
+        email:
+          type: string
+          example: roger.rubber@plouf.pf
+        password:
+          type: string
+          example: password
+        username:
+          type: string
+          example: Roger
+    Work:
+      type: object
+      required:
+        - title
+        - author
+        - status
+        - synopsis
+        - number_of_chapters
+        - type
+        - category
+        - genre
+        - url
+        - image_url
+      properties:
+        title:
+          type: string
+          example: Solo Leveling
+        author:
+          type: string
+          example: Chugong
+        status:
+          type: string
+          example: Ongoing
+        synopsis:
+          type: string
+          example: This is a synopsis
+        number_of_chapters:
+          type: integer
+          example: 200
+        type:
+          type: string
+          example: Manga
+        category:
+          type: string
+          example: Shonen
+        genre:
+          type: string
+          example: Action-Fantasy-Adventure
+        url:
+          type: string
+          example: https://www.ger.com
+        image_url:
+          type: string
+          example: https://www.ger.com
+  responses:
+    Token:
+      description: Token of the user
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    Work:
+      description: All of the work's informations
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              title:
+                type: string
+                example: Solo Leveling
+              author:
+                type: string
+                example: Chugong
+              status:
+                type: string
+                example: Ongoing
+              synopsis:
+                type: string
+                example: This is a synopsis
+              number_of_chapters:
+                type: integer
+                example: 200
+              type:
+                type: string
+                example: Manga
+              category:
+                type: string
+                example: Shonen
+              genre:
+                type: string
+                example: Action-Fantasy-Adventure
