@@ -1,0 +1,7 @@
+{
+    "AppVersion": "0.1.0",
+    "Env": "DEV",
+    "GinTrustedProxies": "127.0.0.1",
+    "ListenAddr": "0.0.0.0",
+    "ListenPort": "4242"
+}
