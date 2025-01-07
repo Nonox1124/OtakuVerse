@@ -79,6 +79,9 @@ paths:
       operationId: GetUserWorks
       tags:
         - user
+      parameters:
+        - $ref: '#/components/parameters/username'
+
       responses:
         '200':
           description: List of works
@@ -120,12 +123,15 @@ paths:
                       type: integer
                       example: 100
                     appreciate_book:
-                      type: enum
+                      type: integer
                       example: 'Like'
   /user/{username}/work/{id_of_book}:
     delete:
       summary: Delete the work of the user
       operationId: DeleteUserWork
+      parameters:
+        - $ref: '#/components/parameters/username'
+        - $ref: '#/components/parameters/id_of_book'
       tags:
         - user
       responses:
@@ -139,6 +145,9 @@ paths:
     patch:
       summary: Update the work of the user
       operationId: PatchUserWork
+      parameters:
+        - $ref: '#/components/parameters/username'
+        - $ref: '#/components/parameters/id_of_book'
       tags:
         - user
       requestBody:
@@ -156,7 +165,7 @@ paths:
                   type: integer
                   example: 100
                 appreciate_book:
-                  type: enum
+                  type: integer
                   example: 'Like'
       responses:
         '200':
@@ -172,6 +181,8 @@ paths:
       operationId: GetWorks
       tags:
         - works
+      parameters:
+        - $ref: '#/components/parameters/title'
       responses:
         '200':
           type: array
@@ -183,6 +194,8 @@ paths:
       operationId: DeleteWork
       tags:
         - works
+      parameters:
+        - $ref: '#/components/parameters/id'
       responses:
         '200':
           shema:
@@ -244,7 +257,7 @@ paths:
                   example: 'Chugong'
       responses:
         '200':
-          shema:
+          schema:
             type: object
             properties:
               message:
@@ -277,6 +290,35 @@ paths:
                 type: string
                 example: 'Ok'
 components:
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      description: username
+      schema:
+        type: string
+    id_of_book:
+      name: id_of_book
+      in: path
+      required: true
+      description: The ID of the book
+      schema:
+        type: integer
+    title:
+      name: title
+      in: path
+      required: true
+      description: title of the book
+      schema:
+        type: string
+    id:
+      name: id
+      in: path
+      required: true
+      description: ID
+      schema:
+        type: integer
   schemas:
     Credentials:
       type: object
