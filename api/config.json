@@ -4,6 +4,11 @@
     "GinTrustedProxies": "127.0.0.1",
     "ListenAddr": "0.0.0.0",
     "ListenPort": "4242",
-    "DatabaseURI": "",
-    "DatabasePassword": ""
+    "Database": {
+        "URI": "",
+        "Port": "",
+        "User": "",
+        "Name": "",
+        "Password": ""
+    }
 }
