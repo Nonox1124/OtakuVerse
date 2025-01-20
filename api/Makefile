@@ -1,4 +1,4 @@
-PROJECT_NAME = "OtakuVerseAPI"
+PROJECT_NAME = "otakuverse-api"
 
 all: build
 
