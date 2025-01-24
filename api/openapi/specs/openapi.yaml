@@ -305,6 +305,7 @@ components:
       description: The ID of the book
       schema:
         type: integer
+        minimum: 0
     title:
       name: title
       in: path
@@ -319,6 +320,7 @@ components:
       description: ID
       schema:
         type: integer
+        minimum: 0
   schemas:
     Credentials:
       type: object
