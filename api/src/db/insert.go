@@ -14,17 +14,17 @@ func InsertNewWorks(newWork openapi.Work) error {
 	}
 	defer db.Close()
 
-    err = InsertIntoTable(constants.WORKS_TABLE, constants.WORKS_VALUES, newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis, newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre, newWork.Url, newWork.ImageUrl)
+    err = insertIntoTable(constants.WORKS_TABLE, constants.WORKS_VALUES, newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis, newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre, newWork.Url, newWork.ImageUrl)
 	if err != nil {
 		return errors.New("InsertNewWorks: " + err.Error())
 	}
     return nil
 }
 
-func InsertIntoTable(tableName, tableContent string, variables ...any) error {
+func insertIntoTable(tableName, tableContent string, variables ...any) error {
 	nbOfVars := 0
 	if tableName == "" || tableContent == "" {
-		return errors.New("InsertIntoTable: Missing informations. tableName: '" + tableName + "' tableContent: '" + tableContent + "'")
+		return errors.New("insertIntoTable: Missing informations. tableName: '" + tableName + "' tableContent: '" + tableContent + "'")
 	}
 	db, err := OpenDB()
 
@@ -44,7 +44,7 @@ func InsertIntoTable(tableName, tableContent string, variables ...any) error {
 		nbOfVars += 1
 	}
 	if nbOfVars < 1 {
-		return errors.New("InsertIntoTable: No variables were passed.")
+		return errors.New("insertIntoTable: No variables were passed.")
 	}
 	request += ")"
 
