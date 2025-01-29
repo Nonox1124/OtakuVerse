@@ -2,11 +2,11 @@ package db
 
 import (
     "errors"
-	"database/sql"
+	  "database/sql"
 
     "otakuverse-api/pkg/openapi"
     "otakuverse-api/src/utils"
-    "otakuverse-api/src/const"
+    "otakuverse-api/src/constants"
 )
 
 func DeleteWorks(workID int) err {
@@ -14,18 +14,18 @@ func DeleteWorks(workID int) err {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
-
-    err := DeleteFromTable(WORKS_TABLE, "id = ?", Work)
+  defer db.Close()
+  
+  err = InsertIntoTable(constants.WORKS_TABLE, "id=?", )
 	if err != nil {
-		return errors.New("DeleteWorks: ", err)
+		return errors.New("DeleteWorks: " + err.Error())
 	}
     return nil
 }
 
-func DeleteFromTable(tableName, conditions string, variables ...any) error {
-	if tableName == "" || conditions == "" {
-		return errors.New("DeleteFromTable: Missing informations. tableName: '" + tableName + "' tableContent: '" + tableContent + "'")
+func DeleteFromTable(tableName, condition string, variables ...any) error {
+	if tableName == "" || condition == "" {
+		return errors.New("DeleteFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
 	}
 	db, err := OpenDB()
 	if err != nil {
@@ -33,14 +33,16 @@ func DeleteFromTable(tableName, conditions string, variables ...any) error {
 	}
 	defer db.Close()
 
-    stmt, err := db.Prepare("DELETE FROM " + tableName + " WHERE " + conditions)
+    stmt, err := db.Prepare("DELETE FROM " + tableName + " WHERE " + condition)
 	if err != nil {
-		return errors.New("DeleteFromTable: Failed to prepare statement:", err)
+		return errors.New("DeleteFromTable: Failed to prepare statement:" + err.Error())
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(variables)
 	if err != nil {
-		return errors.New("DeleteFromTable: Failed to insert new works:", err)
+		return errors.New("DeleteFromTable: Failed to insert new works:" + err.Error())
 	}
     return nil
+}
+

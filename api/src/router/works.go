@@ -1,7 +1,12 @@
 package router
 
 import (
+    "net/http"
+
     "github.com/gin-gonic/gin"
+
+    "otakuverse-api/src/db"
+    // "otakuverse-api/pkg/openapi"
 )
 
 func HelperGetWorks(c *gin.Context, username string) {
@@ -9,7 +14,18 @@ func HelperGetWorks(c *gin.Context, username string) {
 }
 
 func HelperDeleteWork(c *gin.Context, id int) {
-    // non implemented func
+    err := db.DeleteWorks(id)
+    if err != nil {
+        c.IndentedJSON(
+            http.StatusBadRequest,
+            err,
+        )
+        return
+    }
+    c.IndentedJSON(
+        http.StatusBadRequest,
+        "",
+    )
 }
 
 func HelperPostWork(c *gin.Context) {
