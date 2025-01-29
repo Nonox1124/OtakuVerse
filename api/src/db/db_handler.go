@@ -12,7 +12,7 @@ import (
 func getPostgresInfos() string {
 	conf := utils.GetConfig().Database
 	return "host=" + conf.URI + " port=" + conf.Port + " user=" + conf.User +
-	" password" + conf.Password + " dbname" + conf.Name + " sslmode=disable"
+	" password=" + conf.Password + " dbname=" + conf.Name + " sslmode=disable"
 }
 
 func OpenDB() (sb *sql.DB, err error) {
