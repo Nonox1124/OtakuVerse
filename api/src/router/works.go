@@ -6,7 +6,7 @@ import (
     "github.com/gin-gonic/gin"
 
     "otakuverse-api/src/db"
-    // "otakuverse-api/pkg/openapi"
+    "otakuverse-api/pkg/openapi"
 )
 
 func HelperGetWorks(c *gin.Context, username string) {
@@ -17,17 +17,32 @@ func HelperDeleteWork(c *gin.Context, id int) {
     err := db.DeleteWorks(id)
     if err != nil {
         c.IndentedJSON(
-            http.StatusBadRequest,
+            http.StatusInternalServerError,
             err,
         )
         return
     }
     c.IndentedJSON(
-        http.StatusBadRequest,
+        http.StatusOK,
         "",
     )
 }
 
 func HelperPostWork(c *gin.Context) {
-    // non implemented func
+    var newWork openapi.Work
+    err := c.BindJSON(&newWork)
+    if err == nil {
+        err = db.InsertNewWorks(newWork)
+    }
+    if err != nil {
+        c.IndentedJSON(
+            http.StatusInternalServerError,
+            err,
+        )
+        return
+    }
+    c.IndentedJSON(
+        http.StatusOK,
+        "",
+    )
 }
