@@ -2,6 +2,7 @@ package db
 
 import (
     "errors"
+	"fmt"
 
     "otakuverse-api/pkg/openapi"
     "otakuverse-api/src/constants"
@@ -35,11 +36,11 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 
 	request := "INSERT INTO " + tableName + " " + tableContent + " VALUES ("
 
-	for _ = range variables {
+	for i = range variables {
 		if nbOfVars == 0 {
-			request += ", ?"
+			fmt.Sprintf("$%d", i)
 		} else {
-			request += "?"
+			fmt.Sprintf(", $%d", i)
 		}
 		nbOfVars += 1
 	}
