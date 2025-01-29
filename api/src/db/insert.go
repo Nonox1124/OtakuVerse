@@ -2,23 +2,23 @@ package db
 
 import (
     "errors"
-	"database/sql"
+	// "database/sql"
 
     "otakuverse-api/pkg/openapi"
-    "otakuverse-api/src/utils"
-    "otakuverse-api/src/const"
+    // "otakuverse-api/src/utils"
+    "otakuverse-api/src/constants"
 )
 
-func InsertNewWorks(newWork openapi.Work) err {
+func InsertNewWorks(newWork openapi.Work) error {
     db, err := OpenDB()
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-    err := InsertIntoTable(WORKS_TABLE, WORKS_VALUES, newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis, newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre, newWork.Url, newWork.ImageUrl)
+    err = InsertIntoTable(constants.WORKS_TABLE, constants.WORKS_VALUES, newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis, newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre, newWork.Url, newWork.ImageUrl)
 	if err != nil {
-		return errors.New("InsertNewWorks: ", err)
+		return errors.New("InsertNewWorks: " + err.Error())
 	}
     return nil
 }
@@ -37,7 +37,7 @@ func InsertIntoTable(tableName, tableContent string, variables ...any) error {
 
 	request := "INSERT INTO " + tableName + " " + tableContent + " VALUES ("
 
-	for _ := range variables {
+	for _ = range variables {
 		if nbOfVars == 0 {
 			request += ", ?"
 		} else {
@@ -52,13 +52,13 @@ func InsertIntoTable(tableName, tableContent string, variables ...any) error {
 
     stmt, err := db.Prepare(request)
 	if err != nil {
-		return errors.New("Failed to prepare statement:", err)
+		return errors.New("Failed to prepare statement:" + err.Error())
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(variables)
 	if err != nil {
-		return errors.New("Failed to insert new works:", err)
+		return errors.New("Failed to insert new works:" + err.Error())
 	}
     return nil
 }

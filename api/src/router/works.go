@@ -5,8 +5,8 @@ import (
 
     "github.com/gin-gonic/gin"
 
-    "otakuverse-api/db/db"
-    "otakuverse-api/pkg/openapi"
+    "otakuverse-api/src/db"
+    // "otakuverse-api/pkg/openapi"
 )
 
 func HelperGetWorks(c *gin.Context, username string) {
@@ -14,12 +14,8 @@ func HelperGetWorks(c *gin.Context, username string) {
 }
 
 func HelperDeleteWork(c *gin.Context, id int) {
-    var requestBody openapi.LauncherRequest
-    err := c.BindJSON(&requestBody)
-    DeleteWorks(id)
+    err := db.DeleteWorks(id)
     if err != nil {
-        go_modules_logger.GetLogger().Error("SteamHelper: Error while Json binding :" + err.Error())
-// replace by str "ok"Error.New()
         c.IndentedJSON(
             http.StatusBadRequest,
             err,
