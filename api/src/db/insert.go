@@ -2,10 +2,8 @@ package db
 
 import (
     "errors"
-	// "database/sql"
 
     "otakuverse-api/pkg/openapi"
-    // "otakuverse-api/src/utils"
     "otakuverse-api/src/constants"
 )
 
