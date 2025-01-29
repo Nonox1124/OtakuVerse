@@ -2,21 +2,21 @@ package db
 
 import (
     "errors"
-	// "database/sql"
+	  "database/sql"
 
-    // "otakuverse-api/pkg/openapi"
-    // "otakuverse-api/src/utils"
+    "otakuverse-api/pkg/openapi"
+    "otakuverse-api/src/utils"
     "otakuverse-api/src/constants"
 )
 
-func DeleteWorks(workID int) error {
+func DeleteWorks(workID int) err {
     db, err := OpenDB()
 	if err != nil {
 		return err
 	}
-	defer db.Close()
-
-    err = InsertIntoTable(constants.WORKS_TABLE, "id=?", )
+  defer db.Close()
+  
+  err = InsertIntoTable(constants.WORKS_TABLE, "id=?", )
 	if err != nil {
 		return errors.New("DeleteWorks: " + err.Error())
 	}
@@ -28,7 +28,6 @@ func DeleteFromTable(tableName, condition string, variables ...any) error {
 		return errors.New("DeleteFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
 	}
 	db, err := OpenDB()
-
 	if err != nil {
 		return err
 	}
@@ -46,3 +45,4 @@ func DeleteFromTable(tableName, condition string, variables ...any) error {
 	}
     return nil
 }
+
