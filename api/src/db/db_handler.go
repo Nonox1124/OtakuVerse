@@ -2,6 +2,7 @@ package db
 
 import (
     // "errors"
+	_ "github.com/lib/pq"
 	"database/sql"
 
     // "otakuverse-api/pkg/openapi"
@@ -9,12 +10,9 @@ import (
 )
 
 func getPostgresInfos() string {
-	return "host=" + utils.GetConfig().Database.URI +
-	" port=" + utils.GetConfig().Database.Port +
-	" user=" + utils.GetConfig().Database.User +
-	" password" + utils.GetConfig().Database.Password +
-	" dbname" + utils.GetConfig().Database.Name +
-	" sslmode=disable"
+	conf := utils.GetConfig().Database
+	return "host=" + conf.URI + " port=" + conf.Port + " user=" + conf.User +
+	" password" + conf.Password + " dbname" + conf.Name + " sslmode=disable"
 }
 
 func OpenDB() (sb *sql.DB, err error) {
