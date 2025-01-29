@@ -2,43 +2,54 @@ package db
 
 import (
     "errors"
+	"database/sql"
 
     "otakuverse-api/src/constants"
+    "otakuverse-api/pkg/openapi"
 )
 
-func GetWorks(workID int) error {
+func GetWorks(variables ...string) ([]openapi.Work, error) {
     db, err := OpenDB()
     if err != nil {
-        return err
+        return nil, err
     }
     defer db.Close()
 
-    err = getFromTable(constants.WORKS_TABLE, "id=?", )
+    rows, err := getFromTable(constants.WORKS_TABLE, "id=?", variables)
     if err != nil {
-        return errors.New("GetWorks: " + err.Error())
+        return nil, errors.New("GetWorks: " + err.Error())
     }
-    return nil
+
+    defer rows.Close()
+
+	works := []openapi.Work{}
+	for rows.Next() {
+		work := openapi.Work{}
+		err := rows.Scan(&work.Author, &work.Category, &work.Genre, &work.ImageUrl,
+            &work.NumberOfChapters, &work.Status, &work.Synopsis, &work.Title,
+            &work.Type, &work.Url,
+        )
+		if err != nil {
+            return nil, errors.New("GetWorks: fail to scan work: " + err.Error())
+		}
+		works = append(works, work)
+	}
+	return works, nil
 }
 
-func getFromTable(tableName, condition string, variables ...any) error {
+func getFromTable(tableName, condition string, variables ...any) (*sql.Rows, error) {
     if tableName == "" || condition == "" {
-        return errors.New("getFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
+        return nil, errors.New("getFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
     }
     db, err := OpenDB()
     if err != nil {
-        return err
+        return nil, err
     }
     defer db.Close()
 
-    stmt, err := db.Prepare("GetWorks FROM " + tableName + " WHERE " + condition)
+    rows, err := db.Query("SELECT FROM " + tableName + " WHERE " + condition + " LIMITE 5", variables)
     if err != nil {
-        return errors.New("getFromTable: Failed to prepare statement:" + err.Error())
+        return nil, errors.New("getFromTable: Failed to execute the query:" + err.Error())
     }
-    defer stmt.Close()
-
-    _, err = stmt.Exec(variables)
-    if err != nil {
-        return errors.New("getFromTable: Failed to insert new works:" + err.Error())
-    }
-    return nil
+    return rows, nil
 }

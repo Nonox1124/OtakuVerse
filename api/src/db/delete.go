@@ -38,7 +38,7 @@ func deleteFromTable(tableName, condition string, variables ...any) error {
 
     _, err = stmt.Exec(variables)
     if err != nil {
-        return errors.New("deleteFromTable: Failed to insert new works:" + err.Error())
+        return errors.New("deleteFromTable: Failed to delete" + err.Error())
     }
     return nil
 }

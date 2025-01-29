@@ -56,7 +56,7 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 
 	_, err = stmt.Exec(variables)
 	if err != nil {
-		return errors.New("Failed to insert new works:" + err.Error())
+		return errors.New("Failed to insert:" + err.Error())
 	}
     return nil
 }
