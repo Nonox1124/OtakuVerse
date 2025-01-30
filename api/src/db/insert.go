@@ -1,25 +1,25 @@
 package db
 
 import (
-    "errors"
+	"errors"
 	"fmt"
 
-    "otakuverse-api/pkg/openapi"
-    "otakuverse-api/src/constants"
+	"otakuverse-api/pkg/openapi"
+	"otakuverse-api/src/constants"
 )
 
 func InsertNewWorks(newWork openapi.Work) error {
-    db, err := OpenDB()
+	db, err := OpenDB()
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-    err = insertIntoTable(constants.WORKS_TABLE, constants.WORKS_VALUES, newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis, newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre, newWork.Url, newWork.ImageUrl)
+	err = insertIntoTable(constants.WORKS_TABLE, constants.WORKS_VALUES, newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis, newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre, newWork.Url, newWork.ImageUrl)
 	if err != nil {
 		return errors.New("InsertNewWorks: " + err.Error())
 	}
-    return nil
+	return nil
 }
 
 func insertIntoTable(tableName, tableContent string, variables ...any) error {
@@ -36,11 +36,11 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 
 	request := "INSERT INTO " + tableName + " " + tableContent + " VALUES ("
 
-	for i = range variables {
+	for i := range variables {
 		if nbOfVars == 0 {
-			fmt.Sprintf("$%d", i)
+			request += fmt.Sprintf("$%d", i+1)
 		} else {
-			fmt.Sprintf(", $%d", i)
+			request += fmt.Sprintf(", $%d", i+1)
 		}
 		nbOfVars += 1
 	}
@@ -48,16 +48,21 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 		return errors.New("insertIntoTable: No variables were passed.")
 	}
 	request += ")"
-
-    stmt, err := db.Prepare(request)
+	fmt.Println(request)
+	stmt, err := db.Prepare(request)
 	if err != nil {
 		return errors.New("Failed to prepare statement:" + err.Error())
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(variables)
+	interfaceVariables := make([]interface{}, len(variables))
+	for i, v := range variables {
+		interfaceVariables[i] = v
+	}
+
+	_, err = stmt.Exec(interfaceVariables...)
 	if err != nil {
 		return errors.New("Failed to insert:" + err.Error())
 	}
-    return nil
+	return nil
 }
