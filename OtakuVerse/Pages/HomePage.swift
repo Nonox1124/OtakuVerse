@@ -32,6 +32,12 @@ struct HomePage: View {
                             Text("Total unread chapters: 0")
                         }
                     }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu("Filters", systemImage: "line.3.horizontal.decrease.circle") {
+                            Text("Filter 1")
+                            Text("Filter 2")
+                        }
+                    }
                 }
             }
             .navigationBarBackButtonHidden(true)
