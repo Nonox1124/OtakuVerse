@@ -251,6 +251,28 @@ paths:
               message:
                 type: string
                 example: 'Ok'
+    patch:
+      summary: Update the work
+      operationId: PatchWork
+      tags:
+        - works
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        description: Informations of the work
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Work'
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Ok'
   /works/create:
     post:
       summary: Create a new work
@@ -280,10 +302,14 @@ paths:
         - authors
       responses:
         '200':
-          type: array
-          items:
-            type: string
-            example: 'Chugong'
+          description: List of authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 'Chugong'
     post:
       summary: Create a new author
       operationId: PostAuthor
