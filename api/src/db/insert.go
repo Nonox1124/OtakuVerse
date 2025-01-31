@@ -2,7 +2,6 @@ package db
 
 import (
 	"errors"
-	"fmt"
 
 	"otakuverse-api/pkg/openapi"
 	"otakuverse-api/src/constants"
@@ -23,7 +22,6 @@ func InsertNewWorks(newWork openapi.Work) error {
 }
 
 func insertIntoTable(tableName, tableContent string, variables ...any) error {
-	nbOfVars := 0
 	if tableName == "" || tableContent == "" {
 		return errors.New("insertIntoTable: Missing informations. tableName: '" + tableName + "' tableContent: '" + tableContent + "'")
 	}
@@ -36,19 +34,11 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 
 	request := "INSERT INTO " + tableName + " " + tableContent + " VALUES ("
 
-	for i := range variables {
-		if nbOfVars == 0 {
-			request += fmt.Sprintf("$%d", i+1)
-		} else {
-			request += fmt.Sprintf(", $%d", i+1)
-		}
-		nbOfVars += 1
-	}
-	if nbOfVars < 1 {
+	values := FormatArgumentString(variables)
+	if values == "" {
 		return errors.New("insertIntoTable: No variables were passed.")
 	}
-	request += ")"
-	fmt.Println(request)
+	request += values + ")"
 	stmt, err := db.Prepare(request)
 	if err != nil {
 		return errors.New("Failed to prepare statement:" + err.Error())

@@ -1,11 +1,10 @@
 package db
 
 import (
-    // "errors"
 	_ "github.com/lib/pq"
 	"database/sql"
+	"fmt"
 
-    // "otakuverse-api/pkg/openapi"
     "otakuverse-api/src/utils"
 )
 
@@ -21,4 +20,18 @@ func OpenDB() (sb *sql.DB, err error) {
 		return nil, err
 	}
     return db, nil
+}
+
+func FormatArgumentString(args ...any) string {
+	formatedString := ""
+	index := 1
+	for _, _ = range args {
+		if index == 1 {
+			formatedString += fmt.Sprintf("$%d", index)
+		} else {
+			formatedString += fmt.Sprintf(", $%d", index)
+		}
+		index += 1
+	}
+	return formatedString
 }
