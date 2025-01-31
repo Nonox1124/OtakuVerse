@@ -69,7 +69,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: 'roger.rubber@plouf.pf'
+                password:
+                  type: string
+                  example: 'password'
       responses:
         '200':
           $ref: '#/components/responses/Token'
@@ -126,6 +136,43 @@ paths:
                       type: integer
                       example: 'Like'
   /user/{username}/work/{id_of_book}:
+    post:
+      summary: Add a work to the user's list
+      operationId: PostUserWork
+      parameters:
+        - $ref: '#/components/parameters/username'
+        - $ref: '#/components/parameters/id_of_book'
+      tags:
+        - user
+      requestBody:
+        required: true
+        description: Id of the work, current chapter and the enum of appraciation
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id_of_work
+                - current_chapter
+                - appreciate_book
+              properties:
+                id_of_work:
+                  type: integer
+                  example: 1
+                current_chapter:
+                  type: integer
+                  example: 100
+                appreciate_book:
+                  type: string
+                  example: 'Like'
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Ok'
     delete:
       summary: Delete the work of the user
       operationId: DeleteUserWork
