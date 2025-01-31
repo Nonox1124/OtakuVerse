@@ -8,7 +8,7 @@
 let TEAMS: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
 var STATUSES: [String] {
-    let statuses: [String] = ["Ended", "On Going", "Paused", "Dropped"]
+    let statuses: [String] = BookStatus.allCases.map(\.rawValue)
     return statuses.sorted()
 }
 

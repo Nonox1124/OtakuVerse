@@ -113,7 +113,7 @@ struct DropListSelectorButton: View {
             SelectionSheet(selectedItems: $selectedItems, options: options)
         }
         .onChange(of: selectedItems) { oldValue, newValue in
-            selectedOption = newValue.joined(separator: "-")
+            selectedOption = newValue.joined(separator: " - ")
         }
     }
 }
