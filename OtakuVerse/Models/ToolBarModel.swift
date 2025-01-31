@@ -18,12 +18,8 @@ struct ToolBarModel: ViewModifier {
                     Menu("Menu", systemImage: "line.3.horizontal.circle") {
                         NavigationLink("Home Page", destination: HomePage(currentPage: "HomePage")).disabled(currentPage == "HomePage")
                         NavigationLink("Search Page", destination: SearchPage(currentPage: "SearchPage")).disabled(currentPage == "SearchPage")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu("Filters", systemImage: "line.3.horizontal.decrease.circle") {
-                        Text("Filter 1")
-                        Text("Filter 2")
+                        NavigationLink("Create Work Page", destination: WorkCreationPage(currentPage: "WorkCreationPage")).disabled(currentPage == "WorkCreationPage")
+                        NavigationLink("Author Page", destination: AuthorPage(currentPage: "AuthorPage")).disabled(currentPage == "AuthorPage")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
