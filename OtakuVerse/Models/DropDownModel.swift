@@ -41,7 +41,7 @@ struct OptionSelectionSheet: View {
     let options: [String]
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(options, id: \.self) { option in
                 Button(action: {
                     selectedOption = option
@@ -113,7 +113,7 @@ struct DropListSelectorButton: View {
             SelectionSheet(selectedItems: $selectedItems, options: options)
         }
         .onChange(of: selectedItems) { oldValue, newValue in
-            selectedOption = newValue.joined(separator: "-")
+            selectedOption = newValue.joined(separator: " - ")
         }
     }
 }
@@ -125,7 +125,7 @@ struct SelectionSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(options, id: \.self) { item in
                 HStack {
                     Text(item)

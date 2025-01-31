@@ -23,7 +23,7 @@ struct WorkCreationPage: View {
     @State private var selectedImage: Data = Data()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color.darkBlue.ignoresSafeArea()
                 ScrollView {
