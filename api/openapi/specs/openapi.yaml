@@ -134,7 +134,7 @@ paths:
                       example: 100
                     appreciate_book:
                       type: integer
-                      example: 'Like'
+                      example: 1
                     url:
                       type: string
                       example: 'https://www.ger.com'
@@ -169,8 +169,8 @@ paths:
                   type: integer
                   example: 100
                 appreciate_book:
-                  type: string
-                  example: 'Like'
+                  type: integer
+                  example: 0
       responses:
         '200':
           shema:
@@ -219,7 +219,7 @@ paths:
                   example: 100
                 appreciate_book:
                   type: integer
-                  example: 'Like'
+                  example: 1
       responses:
         '200':
           shema:
