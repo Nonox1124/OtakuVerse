@@ -19,7 +19,7 @@ struct UserWorkGetResponse: Identifiable {
     var category: String
     var genre: String
     var current_chapter: Int
-    var appreciate_book: String
+    var appreciate_book: Int
     var url: String
     var image_url: String
 }
@@ -60,10 +60,22 @@ enum BookStatus: String, CaseIterable {
     
     func statusColor() -> Color {
         switch self {
-        case .completed: return .red
-        case .ongoing: return .green
-        case .dropped: return .black
-        case .pending: return .orange
+            case .completed: return .red
+            case .ongoing: return .green
+            case .dropped: return .black
+            case .pending: return .orange
+        }
+    }
+}
+
+enum AppreciatedBook: Int {
+    case none = 0
+    case like = 1
+    
+    func iconName() -> String {
+        switch self {
+            case .none: return "heart"
+            case .like: return "heart.fill"
         }
     }
 }

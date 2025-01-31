@@ -1,5 +1,5 @@
 //
-//  UserWorkInformationPage.swift
+//  WorkInformationPage.swift
 //  OtakuVerse
 //
 //  Created by Noa Calvet on 31/01/2025.
@@ -7,17 +7,12 @@
 
 import SwiftUI
 
-struct UserWorkInformationPage: View {
+struct WorkInformationPage: View {
     
-    @State var workInformation: UserWorkGetResponse
+    @State var workInformation: WorkGetResponse
     
     @State private var showAllTitle: Bool = false
     @Environment(\.openURL) var openURL
-    
-    var progression: Float {
-        let progression: Float = Float(workInformation.current_chapter) / Float(workInformation.number_of_chapters)
-        return progression
-    }
     
     var body: some View {
         NavigationStack {
@@ -69,27 +64,13 @@ struct UserWorkInformationPage: View {
                             Spacer()
                         }
                         .padding()
-                        HStack {
-                            Spacer()
-                            VStack {
-                                Text("Chapters:")
-                                    .font(.title)
-                                    .bold()
-                                Text("\(workInformation.current_chapter) / \(workInformation.number_of_chapters)")
-                                    .font(.caption)
-                                    .fontWeight(.light)
-                                ProgressView(value: progression)
-                                    .frame(width: 125)
-                            }
-                            Spacer()
-                            Button(action: {
-                                
-                            }) {
-                                Image(systemName: AppreciatedBook(rawValue: workInformation.appreciate_book)?.iconName() ?? "heart")
-                            }
-                            .font(.system(size: 25))
-                            .foregroundStyle(.paleLavender)
-                            Spacer()
+                        VStack {
+                            Text("Total Chapters:")
+                                .font(.title)
+                                .bold()
+                            Text("\(workInformation.number_of_chapters)")
+                                .font(.caption)
+                                .fontWeight(.light)
                         }
                         .padding()
                         VStack {
@@ -128,6 +109,13 @@ struct UserWorkInformationPage: View {
                         }
                     }
                 }
+                .toolbar {
+                    ToolbarItem(placement: .status) {
+                        Button("Add to Library") {
+                            
+                        }
+                    }
+                }
                 .padding()
             }
         }
@@ -135,6 +123,6 @@ struct UserWorkInformationPage: View {
 }
 
 #Preview {
-    let workInformation: UserWorkGetResponse = UserWorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "This is a synopsis", number_of_chapters: 200, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", current_chapter: 150, appreciate_book: 1, url: "https://www.google.com", image_url: "https://www.google.com")
-    UserWorkInformationPage(workInformation: workInformation)
+    let workInformation: WorkGetResponse = WorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "This is a synopsis, so long", number_of_chapters: 200, type: "Manga", category: "Shonen", genre: "Action-Fantasy-Adventure", url: "https://www.google.com", image_url: "https://www.google.com")
+    WorkInformationPage(workInformation: workInformation)
 }

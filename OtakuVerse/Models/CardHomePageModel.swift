@@ -18,7 +18,7 @@ struct CardHomePageModel: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 25)
                     .fill(.white)
@@ -70,7 +70,7 @@ struct CardHomePageModel: View {
                             Button(action: {
                                 print("Heart")
                             }) {
-                                Image(systemName: "heart")
+                                Image(systemName: AppreciatedBook(rawValue: workInformation.appreciate_book)?.iconName() ?? "heart")
                             }
                             .foregroundStyle(Color.ligthPurple)
                             .font(.system(size: 25))
@@ -98,6 +98,6 @@ struct CardHomePageModel: View {
 }
 
 #Preview {
-    let workInformation: UserWorkGetResponse = UserWorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, molestias!", number_of_chapters: 200, type: "Manga", category: "Shonen", genre: "Action-Fantasy-Adventure", current_chapter: 150, appreciate_book: "Like", url: "https://www.google.com", image_url: "https://www.google.com")
+    let workInformation: UserWorkGetResponse = UserWorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, molestias!", number_of_chapters: 200, type: "Manga", category: "Shonen", genre: "Action-Fantasy-Adventure", current_chapter: 150, appreciate_book: 0, url: "https://www.google.com", image_url: "https://www.google.com")
     CardHomePageModel(workInformation: workInformation)
 }

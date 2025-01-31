@@ -41,7 +41,7 @@ struct OptionSelectionSheet: View {
     let options: [String]
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(options, id: \.self) { option in
                 Button(action: {
                     selectedOption = option
@@ -125,7 +125,7 @@ struct SelectionSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List(options, id: \.self) { item in
                 HStack {
                     Text(item)

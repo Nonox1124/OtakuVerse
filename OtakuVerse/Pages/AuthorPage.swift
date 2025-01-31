@@ -15,7 +15,7 @@ struct AuthorPage: View {
     @State private var isDeletedSelected: Bool = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color.darkBlue.ignoresSafeArea()
                 if (isCreatedSelected) {
