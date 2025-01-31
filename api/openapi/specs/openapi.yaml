@@ -135,6 +135,12 @@ paths:
                     appreciate_book:
                       type: integer
                       example: 'Like'
+                    url:
+                      type: string
+                      example: 'https://www.ger.com'
+                    image_url:
+                      type: string
+                      example: 'https://www.ger.com'
   /user/{username}/work/{id_of_book}:
     post:
       summary: Add a work to the user's list
@@ -232,9 +238,47 @@ paths:
         - $ref: '#/components/parameters/title'
       responses:
         '200':
-          type: array
-          items:
-            $ref: '#/components/responses/Work'
+          description: List of works
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id_of_book:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: 'Solo Leveling'
+                    author:
+                      type: string
+                      example: 'Chugong'
+                    status:
+                      type: string
+                      example: 'Ongoing'
+                    synopsis:
+                      type: string
+                      example: 'This is a synopsis'
+                    number_of_chapters:
+                      type: integer
+                      example: 200
+                    type:
+                      type: string
+                      example: 'Manga'
+                    category:
+                      type: string
+                      example: 'Shonen'
+                    genre:
+                      type: string
+                      example: 'Action-Fantasy-Adventure'
+                    url:
+                      type: string
+                      example: 'https://www.ger.com'
+                    image_url:
+                      type: string
+                      example: 'https://www.ger.com'
   /works/{id}:
     delete:
       summary: Delete the work and delete in the user's table
