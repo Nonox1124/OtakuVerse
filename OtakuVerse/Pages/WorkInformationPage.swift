@@ -15,7 +15,7 @@ struct WorkInformationPage: View {
     @Environment(\.openURL) var openURL
     
     var body: some View {
-        NavigationStack {
+        NavigationStack() {
             ZStack(alignment: .top) {
                 Color.darkBlue.ignoresSafeArea()
                 ScrollView {
@@ -119,6 +119,7 @@ struct WorkInformationPage: View {
                 .padding()
             }
         }
+        .navigationTitle("WorkInformationPage")
     }
 }
 
