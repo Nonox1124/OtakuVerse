@@ -6,8 +6,9 @@
 //
 
 import SwiftUICore
+import SwiftUI
 
-struct UserWorkGetResponse: Identifiable {
+struct UserWorkGetResponse: Identifiable, Hashable {
     var id: Int { id_of_work }
     var id_of_work: Int
     var title: String
@@ -76,6 +77,69 @@ enum AppreciatedBook: Int {
         switch self {
             case .none: return "heart"
             case .like: return "heart.fill"
+        }
+    }
+}
+
+enum Destination: Hashable {
+    case author
+    case home
+    case research
+    case workCreation
+    case userWorkInformation(workInformation: UserWorkGetResponse)
+    case logIn
+    case signUp
+}
+
+//extension Destination: CustomStringConvertible {
+//    var description: String {
+//        switch self {
+//        case .home: return "Home"
+//        case .research: return "Research"
+//        case .workCreation: return "Work Creation"
+//        case .userWorkInformation(let workInformation): return "User Work: \(workInformation.title)"
+//        case .author: return "Author"
+//        case .logIn:
+//        case .profile:
+//            <#code#>
+//        case .signUp:
+//            <#code#>
+//        }
+//    }
+//}
+
+class NavigationController: ObservableObject {
+    @Published var path: NavigationPath = NavigationPath()
+    @Published var oldDestination: Destination = .home
+    
+    func navigateTo(_ destination: Destination) {
+        if (!path.isEmpty) {
+            path.removeLast()
+        }
+        oldDestination = destination
+        path.append(destination)
+    }
+    
+    func getPreviousDestination() -> Destination {
+        return oldDestination
+    }
+    
+    func bindingForPath() -> Binding<NavigationPath> {
+        Binding(
+            get: { self.path },
+            set: { self.path = $0 }
+        )
+    }
+    
+    func goBack() {
+        if (!path.isEmpty) {
+            path.removeLast()
+        }
+    }
+    
+    func goRoot() {
+        if (!path.isEmpty) {
+            path.removeLast(path.count)
         }
     }
 }

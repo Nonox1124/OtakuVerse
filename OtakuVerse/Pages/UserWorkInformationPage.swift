@@ -10,6 +10,7 @@ import SwiftUI
 struct UserWorkInformationPage: View {
     
     @State var workInformation: UserWorkGetResponse
+    @ObservedObject var navigationController: NavigationController
     
     @State private var showAllTitle: Bool = false
     @Environment(\.openURL) var openURL
@@ -131,10 +132,6 @@ struct UserWorkInformationPage: View {
                 .padding()
             }
         }
+        .navigationTitle("UserWorkInformationPage")
     }
-}
-
-#Preview {
-    let workInformation: UserWorkGetResponse = UserWorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "This is a synopsis", number_of_chapters: 200, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", current_chapter: 150, appreciate_book: 1, url: "https://www.google.com", image_url: "https://www.google.com")
-    UserWorkInformationPage(workInformation: workInformation)
 }

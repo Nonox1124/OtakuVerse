@@ -9,45 +9,43 @@ import SwiftUI
 
 struct AuthorPage: View {
     
-    @State var currentPage: String
+    @ObservedObject var navigationController: NavigationController
     
     @State private var isCreatedSelected: Bool = true
     @State private var isDeletedSelected: Bool = false
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.darkBlue.ignoresSafeArea()
-                if (isCreatedSelected) {
-                    AuthorCreatorView()
-                } else {
-                    AuthorDeletedView()
-                }
+        ZStack {
+            Color.darkBlue.ignoresSafeArea()
+            if (isCreatedSelected) {
+                AuthorCreatorView()
+            } else {
+                AuthorDeletedView()
             }
-            .withToolBarModel(currentPage: currentPage)
-            .toolbar {
-                ToolbarItem(placement: .status) {
-                    HStack {
-                        Button(action: {
-                            isCreatedSelected = true
-                            isDeletedSelected = false
-                        }) {
-                            Text("Create")
-                                .foregroundStyle(isCreatedSelected ? .ligthPurple : .white)
-                        }
-                        .disabled(isCreatedSelected)
-                        .padding(.horizontal)
-                        
-                        Button(action: {
-                            isCreatedSelected = false
-                            isDeletedSelected = true
-                        }) {
-                            Text("Delete")
-                                .foregroundStyle(isDeletedSelected ? .ligthPurple : .white)
-                        }
-                        .disabled(isDeletedSelected)
-                        .padding(.horizontal)
+        }
+        .withToolBarModel(navigationController: _navigationController)
+        .toolbar {
+            ToolbarItem(placement: .status) {
+                HStack {
+                    Button(action: {
+                        isCreatedSelected = true
+                        isDeletedSelected = false
+                    }) {
+                        Text("Create")
+                            .foregroundStyle(isCreatedSelected ? .ligthPurple : .white)
                     }
+                    .disabled(isCreatedSelected)
+                    .padding(.horizontal)
+                    
+                    Button(action: {
+                        isCreatedSelected = false
+                        isDeletedSelected = true
+                    }) {
+                        Text("Delete")
+                            .foregroundStyle(isDeletedSelected ? .ligthPurple : .white)
+                    }
+                    .disabled(isDeletedSelected)
+                    .padding(.horizontal)
                 }
             }
         }
@@ -55,9 +53,9 @@ struct AuthorPage: View {
     }
 }
 
-#Preview {
-    AuthorPage(currentPage: "AuthorPage")
-}
+//#Preview {
+//    AuthorPage(path: $path)
+//}
 
 struct AuthorCreatorView: View {
     
