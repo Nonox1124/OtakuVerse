@@ -10,7 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var navigationController = NavigationController()
     
-    @State private var works: [UserWorkGetResponse] = [UserWorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "This is a synopsis", number_of_chapters: 200, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", current_chapter: 150, appreciate_book: 1, url: "https://www.google.com", image_url: "https://www.google.com"), UserWorkGetResponse(id_of_work: 2, title: "Salut les gens, je m'appelle Yuki", author: "Hiroyuki Takei", status: "Completed", synopsis: "This is a synopsis", number_of_chapters: 100, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", current_chapter: 10, appreciate_book: 0, url: "https://www.google.com", image_url: "https://www.google.com")]
+    @State private var works: [UserWorkGetResponse] = []
+    @State private var worksSearch: [WorkGetResponse] = [WorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "This is a synopsis", number_of_chapters: 200, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", url: "https://www.google.com", image_url: "https://www.google.com"), WorkGetResponse(id_of_work: 2, title: "Salut les gens, je m'appelle Yuki", author: "Hiroyuki Takei", status: "Completed", synopsis: "This is a synopsis", number_of_chapters: 100, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", url: "https://www.google.com", image_url: "https://www.google.com")]
 
     var body: some View {
         NavigationStack(path: $navigationController.path) {
@@ -23,7 +24,7 @@ struct ContentView: View {
                 case .author:
                     AuthorPage(navigationController: navigationController)
                 case .research:
-                    SearchPage(navigationController: navigationController)
+                    SearchPage(navigationController: navigationController, worksSearch: $worksSearch)
                 case .workCreation:
                     WorkCreationPage(navigationController: navigationController)
                 case .logIn:
@@ -38,6 +39,8 @@ struct ContentView: View {
                     UserWorkInformationPage(workInformation: $works[id], navigationController: navigationController, index: id)
                 case .modifyUserWork(let id):
                     ModifiableUserWorkInformationPage(workInformation: $works[id])
+                case .workInformation(let id):
+                    WorkInformationPage(workInformation: $worksSearch[id], workList: $works)
                 }
             }
         }

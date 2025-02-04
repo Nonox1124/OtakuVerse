@@ -91,6 +91,7 @@ enum Destination: Hashable {
 enum SecondaryDestination: Hashable {
     case userWorkInformation(Int)
     case modifyUserWork(Int)
+    case workInformation(Int)
 }
 
 class NavigationController: ObservableObject {
