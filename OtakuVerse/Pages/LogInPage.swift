@@ -38,7 +38,7 @@ struct LogInPage: View {
                 }
                 .padding(.bottom)
                 Button(action: {
-                    navigationController.navigateTo(Destination.signUp)
+                    navigationController.navigateToDestination(Destination.signUp)
                 }) {
                     Text("Sign Up")
                 }

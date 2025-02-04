@@ -115,6 +115,9 @@ struct DropListSelectorButton: View {
         .onChange(of: selectedItems) { oldValue, newValue in
             selectedOption = newValue.joined(separator: " - ")
         }
+        .onAppear() {
+            selectedItems = Set((selectedOption as NSString).components(separatedBy: " - "))
+        }
     }
 }
 
@@ -160,6 +163,6 @@ struct SelectionSheet: View {
 }
 
 #Preview {
-    @Previewable @State var selectedOption: String = ""
+    @Previewable @State var selectedOption: String = "Action"
     DropListSelectorButton(selectedOption: $selectedOption, options: GENRES, title: "Select genres")
 }

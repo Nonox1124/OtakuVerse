@@ -8,8 +8,7 @@
 import SwiftUICore
 import SwiftUI
 
-struct UserWorkGetResponse: Identifiable, Hashable {
-    var id: Int { id_of_work }
+struct UserWorkGetResponse: Hashable {
     var id_of_work: Int
     var title: String
     var author: String
@@ -25,8 +24,7 @@ struct UserWorkGetResponse: Identifiable, Hashable {
     var image_url: String
 }
 
-struct WorkGetResponse: Identifiable {
-    var id: Int { id_of_work }
+struct WorkGetResponse: Hashable {
     var id_of_work: Int
     var title: String
     var author: String
@@ -86,33 +84,20 @@ enum Destination: Hashable {
     case home
     case research
     case workCreation
-    case userWorkInformation(workInformation: UserWorkGetResponse)
     case logIn
     case signUp
 }
 
-//extension Destination: CustomStringConvertible {
-//    var description: String {
-//        switch self {
-//        case .home: return "Home"
-//        case .research: return "Research"
-//        case .workCreation: return "Work Creation"
-//        case .userWorkInformation(let workInformation): return "User Work: \(workInformation.title)"
-//        case .author: return "Author"
-//        case .logIn:
-//        case .profile:
-//            <#code#>
-//        case .signUp:
-//            <#code#>
-//        }
-//    }
-//}
+enum SecondaryDestination: Hashable {
+    case userWorkInformation(Int)
+    case modifyUserWork(Int)
+}
 
 class NavigationController: ObservableObject {
     @Published var path: NavigationPath = NavigationPath()
     @Published var oldDestination: Destination = .home
     
-    func navigateTo(_ destination: Destination) {
+    func navigateToDestination(_ destination: Destination) {
         if (!path.isEmpty) {
             path.removeLast()
         }
@@ -120,15 +105,12 @@ class NavigationController: ObservableObject {
         path.append(destination)
     }
     
-    func getPreviousDestination() -> Destination {
-        return oldDestination
+    func navigateToSecondaryDestination(_ secondaryDestination: SecondaryDestination) {
+        path.append(secondaryDestination)
     }
     
-    func bindingForPath() -> Binding<NavigationPath> {
-        Binding(
-            get: { self.path },
-            set: { self.path = $0 }
-        )
+    func getPreviousDestination() -> Destination {
+        return oldDestination
     }
     
     func goBack() {
