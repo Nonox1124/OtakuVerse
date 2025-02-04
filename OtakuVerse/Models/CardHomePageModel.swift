@@ -10,7 +10,8 @@ import SwiftUI
 struct CardHomePageModel: View {
     
     @ObservedObject var navigationController: NavigationController
-    @State var workInformation: UserWorkGetResponse
+    @Binding var workInformation: UserWorkGetResponse
+    let index: Int
     
     @State private var size: CGSize = .zero
     
@@ -51,7 +52,9 @@ struct CardHomePageModel: View {
                     }
                     .font(.system(size: 10))
                     Button("Read") {
-                        print("Read")
+                        if (workInformation.current_chapter + 1 < workInformation.number_of_chapters) {
+                            workInformation.current_chapter += 1
+                        }
                     }
                     .foregroundStyle(Color.ligthPurple)
                     .tint(Color.paleLavender)
@@ -63,7 +66,7 @@ struct CardHomePageModel: View {
                 VStack {
                     HStack {
                         Button(action: {
-//                            path.append(Destination.userWorkInformation(workInformation: workInformation))
+                            navigationController.navigateToSecondaryDestination(SecondaryDestination.userWorkInformation(index))
                         }) {
                             Image(systemName: "info.circle.fill")
                         }
@@ -71,7 +74,11 @@ struct CardHomePageModel: View {
                         .font(.system(size: 25))
                         Spacer().frame(width: self.size.width / 14)
                         Button(action: {
-                            print("Heart")
+                            if (workInformation.appreciate_book == AppreciatedBook.none.rawValue) {
+                                workInformation.appreciate_book = AppreciatedBook.like.rawValue
+                            } else {
+                                workInformation.appreciate_book = AppreciatedBook.none.rawValue
+                            }
                         }) {
                             Image(systemName: AppreciatedBook(rawValue: workInformation.appreciate_book)?.iconName() ?? "heart")
                         }
@@ -91,7 +98,7 @@ struct CardHomePageModel: View {
             .padding()
         }
         .onGeometryChange(for: CGSize.self) { proxy in
-                    proxy.size
+            proxy.size
         } action: {
             size = $0
         }

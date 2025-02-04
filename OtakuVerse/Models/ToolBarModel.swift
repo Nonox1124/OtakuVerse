@@ -19,19 +19,19 @@ struct ToolBarModel: ViewModifier {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu("Menu", systemImage: "line.3.horizontal.circle") {
                         Button("Home Page") {
-                            navigationController.navigateTo(Destination.home)
+                            navigationController.navigateToDestination(Destination.home)
                         }
                         .disabled(navigationController.oldDestination == Destination.home)
                         Button("Search Page") {
-                            navigationController.navigateTo(Destination.research)
+                            navigationController.navigateToDestination(Destination.research)
                         }
                         .disabled(navigationController.oldDestination == Destination.research)
                         Button("Create Work Page") {
-                            navigationController.navigateTo(Destination.workCreation)
+                            navigationController.navigateToDestination(Destination.workCreation)
                         }
                         .disabled(navigationController.oldDestination == Destination.workCreation)
                         Button("Author Page") {
-                            navigationController.navigateTo(Destination.author)
+                            navigationController.navigateToDestination(Destination.author)
                         }
                         .disabled(navigationController.oldDestination == Destination.author)
                     }
@@ -41,7 +41,7 @@ struct ToolBarModel: ViewModifier {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        navigationController.navigateTo(Destination.logIn)
+                        navigationController.navigateToDestination(Destination.logIn)
                     }) {
                         Image(systemName: "person.crop.circle")
                     }
