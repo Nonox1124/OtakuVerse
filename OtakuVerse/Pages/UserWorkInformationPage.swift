@@ -47,6 +47,16 @@ struct UserWorkInformationPage: View {
                             .multilineTextAlignment(.center)
                     }
                     .padding()
+                    VStack {
+                        Text("Category:")
+                            .font(.title)
+                            .bold()
+                        Text(workInformation.category)
+                            .font(.caption)
+                            .fontWeight(.light)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
                     HStack {
                         Spacer()
                         VStack {
@@ -146,7 +156,7 @@ struct UserWorkInformationPage: View {
             ToolbarItem(placement: .status) {
                 HStack {
                     Button(action: {
-                        if (workInformation.current_chapter + 1 < workInformation.number_of_chapters) {
+                        if (workInformation.current_chapter + 1 <= workInformation.number_of_chapters) {
                             workInformation.current_chapter += 1
                         }
                     }) {
@@ -155,7 +165,7 @@ struct UserWorkInformationPage: View {
                     .padding(.horizontal)
                     
                     Button(action: {
-                        if (workInformation.current_chapter - 1 > 0) {
+                        if (workInformation.current_chapter - 1 >= 0) {
                             workInformation.current_chapter -= 1
                         }
                     }) {
