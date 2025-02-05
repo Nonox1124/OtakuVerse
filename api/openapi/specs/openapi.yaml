@@ -94,53 +94,7 @@ paths:
 
       responses:
         '200':
-          description: List of works
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id_of_book:
-                      type: integer
-                      example: 1
-                    title:
-                      type: string
-                      example: 'Solo Leveling'
-                    author:
-                      type: string
-                      example: 'Chugong'
-                    status:
-                      type: string
-                      example: 'Ongoing'
-                    synopsis:
-                      type: string
-                      example: 'This is a synopsis'
-                    number_of_chapters:
-                      type: integer
-                      example: 200
-                    type:
-                      type: string
-                      example: 'Manga'
-                    category:
-                      type: string
-                      example: 'Shonen'
-                    genre:
-                      type: string
-                      example: 'Action-Fantasy-Adventure'
-                    current_chapter:
-                      type: integer
-                      example: 100
-                    appreciate_book:
-                      type: integer
-                      example: 1
-                    url:
-                      type: string
-                      example: 'https://www.ger.com'
-                    image_url:
-                      type: string
-                      example: 'https://www.ger.com'
+          $ref: '#/components/responses/UserWork'
   /user/{username}/work/{id_of_book}:
     post:
       summary: Add a work to the user's list
@@ -236,49 +190,22 @@ paths:
         - works
       parameters:
         - $ref: '#/components/parameters/title'
+      requestBody:
+        required: true
+        description: The username of the user to don't show his works
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+              properties:
+                username:
+                  type: string
+                  example: 'Toko'
       responses:
         '200':
-          description: List of works
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id_of_book:
-                      type: integer
-                      example: 1
-                    title:
-                      type: string
-                      example: 'Solo Leveling'
-                    author:
-                      type: string
-                      example: 'Chugong'
-                    status:
-                      type: string
-                      example: 'Ongoing'
-                    synopsis:
-                      type: string
-                      example: 'This is a synopsis'
-                    number_of_chapters:
-                      type: integer
-                      example: 200
-                    type:
-                      type: string
-                      example: 'Manga'
-                    category:
-                      type: string
-                      example: 'Shonen'
-                    genre:
-                      type: string
-                      example: 'Action-Fantasy-Adventure'
-                    url:
-                      type: string
-                      example: 'https://www.ger.com'
-                    image_url:
-                      type: string
-                      example: 'https://www.ger.com'
+          $ref: '#/components/responses/Work'
   /works/{id}:
     delete:
       summary: Delete the work and delete in the user's table
@@ -544,3 +471,49 @@ components:
               genre:
                 type: string
                 example: 'Action-Fantasy-Adventure'
+    UserWork:
+      description: All of the user's work's informations
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id_of_work:
+                type: integer
+                example: 1
+              title:
+                type: string
+                example: 'Solo Leveling'
+              author:
+                type: string
+                example: 'Chugong'
+              status:
+                type: string
+                example: 'Ongoing'
+              synopsis:
+                type: string
+                example: 'This is a synopsis'
+              number_of_chapters:
+                type: integer
+                example: 200
+              type:
+                type: string
+                example: 'Manga'
+              category:
+                type: string
+                example: 'Shonen'
+              genre:
+                type: string
+                example: 'Action-Fantasy-Adventure'
+              current_chapter:
+                type: integer
+                example: 100
+              appreciate_book:
+                type: integer
+                example: 1
+              url:
+                type: string
+                example: 'https://www.ger.com'
+              image_url:
+                type: string
+                example: 'https://www.ger.com'
