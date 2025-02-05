@@ -63,6 +63,16 @@ struct WorkInformationPage: View {
                             .multilineTextAlignment(.center)
                     }
                     .padding()
+                    VStack {
+                        Text("Category:")
+                            .font(.title)
+                            .bold()
+                        Text(workInformation.category)
+                            .font(.caption)
+                            .fontWeight(.light)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
                     HStack {
                         Spacer()
                         VStack {

@@ -10,26 +10,44 @@ import SwiftUI
 struct SearchPage: View {
     
     @ObservedObject var navigationController: NavigationController
-    @Binding var worksSearch: [WorkGetResponse]
+    @Binding var works: [WorkGetResponse]
     
     @State private var searchText: String = ""
+    @State private var selectedItem: [SearchableType: String] = [:]
+    
+    var searchableWorks: [WorkGetResponse] {
+        var filteredWorks: [WorkGetResponse] = []
+        filteredWorks = works.filter { !searchText.isEmpty ? ($0.title.lowercased().contains(searchText.lowercased())) : true }
+        if let selectedAuthor = selectedItem[.author] {
+            filteredWorks = filteredWorks.filter { $0.author == selectedAuthor }
+        }
+        if let selectedCategory = selectedItem[.category] {
+            filteredWorks = filteredWorks.filter { $0.category == selectedCategory }
+        }
+        if let selectedGenre = selectedItem[.genre] {
+            filteredWorks = filteredWorks.filter { $0.genre == selectedGenre }
+        }
+        if let selectedStatus = selectedItem[.status] {
+            filteredWorks = filteredWorks.filter { $0.status == selectedStatus }
+        }
+        return filteredWorks
+    }
     
     var body: some View {
         ZStack {
             Color.darkBlue.ignoresSafeArea()
             ScrollView {
-                ForEach(self.worksSearch.indices, id: \.self) { index in
-                    CardSearchPageModel(navigationController: navigationController, workInformation: $worksSearch[index], index: index)
+                ForEach(self.searchableWorks, id: \.self) { work in
+                    if let index = works.firstIndex(where: { $0.id_of_work == work.id_of_work }) {
+                        CardSearchPageModel(navigationController: navigationController, workInformation: $works[index], works: $works)
+                    }
                 }
             }
         }
         .searchable(text: $searchText)
         .withToolBarModel(navigationController: _navigationController) {
             AnyView(
-                Menu("Filters", systemImage: "line.3.horizontal.decrease.circle") {
-                    Text("Filter 1")
-                    Text("Filter 2")
-                }
+                DropFilterButton(selectedItems: $selectedItem)
             )
         }
         .navigationBarBackButtonHidden(true)

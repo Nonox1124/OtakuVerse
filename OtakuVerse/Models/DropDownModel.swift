@@ -166,3 +166,102 @@ struct SelectionSheet: View {
     @Previewable @State var selectedOption: String = "Action"
     DropListSelectorButton(selectedOption: $selectedOption, options: GENRES, title: "Select genres")
 }
+
+struct DropFilterButton: View {
+    
+    @Binding var selectedItems: [SearchableType: String]
+    
+    @State private var isSheetPresented = false
+    
+    var body: some View {
+        VStack {
+            Button(action: {isSheetPresented.toggle()}) {
+                Image(systemName: "line.3.horizontal.decrease.circle")
+            }
+        }
+        .fullScreenCover(isPresented: $isSheetPresented) {
+            FilterSheet(selectedItems: $selectedItems)
+        }
+    }
+}
+
+struct FilterSheet: View {
+    
+    @Binding var selectedItems: [SearchableType: String]
+    
+    private let options: [SearchableType: [String]] = [
+        .author: TEAMS,
+        .category: CATEGORIES,
+        .genre: GENRES,
+        .status: STATUSES,
+        .type: TYPES
+    ]
+    @State private var selectedCategory: SearchableType? = nil
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            HStack {
+                List(SearchableType.allCases, id: \.self, selection: $selectedCategory) { category in
+                    Text(category.rawValue)
+                        .padding()
+                        .onTapGesture {
+                            selectedCategory = category
+                        }
+                }
+                .frame(width: 180)
+                
+                Divider()
+                
+                VStack {
+                    if let selectedCategory = selectedCategory, let items = options[selectedCategory] {
+                        List(items, id: \.self) { item in
+                            HStack {
+                                Text(item)
+                                Spacer()
+                                if selectedItems[selectedCategory] == item {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.blue)
+                                } else {
+                                    Image(systemName: "circle")
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                if selectedItems[selectedCategory] == item {
+                                    selectedItems[selectedCategory] = nil
+                                } else {
+                                    selectedItems[selectedCategory] = item
+                                }
+                            }
+                        }
+                    } else {
+                        Text("Select a category")
+                            .font(.headline)
+                            .foregroundColor(.gray)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Reset") {
+                        selectedItems = [:]
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    @Previewable @State var selectedItems: [SearchableType: String] = [:]
+    DropFilterButton(selectedItems: $selectedItems)
+}

@@ -11,7 +11,7 @@ struct CardSearchPageModel: View {
 
     @StateObject var navigationController: NavigationController
     @Binding var workInformation: WorkGetResponse
-    let index: Int
+    @Binding var works: [WorkGetResponse]
 
     @State private var size: CGSize = .zero
     
@@ -38,6 +38,7 @@ struct CardSearchPageModel: View {
         }
         .frame(height: 200)
         .onTapGesture {
+            let index: Int = self.works.firstIndex(of: self.workInformation)!
             navigationController.navigateToSecondaryDestination(SecondaryDestination.workInformation(index))
         }
     }

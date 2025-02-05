@@ -15,6 +15,7 @@ struct ModifiableUserWorkInformationPage: View {
     @State private var numberOfChapters: String = ""
     @State private var synopsis: String = ""
     @State private var author: String = ""
+    @State private var selectedCategory: String = "Select a category"
     @State private var selectedTeam: String = "Select a team"
     @State private var urlWork: String = ""
     @State private var selectedType: String = "Select a type"
@@ -32,6 +33,7 @@ struct ModifiableUserWorkInformationPage: View {
         selectedType = workInformation.type
         selectedStatus = workInformation.status
         selectedGenres = workInformation.genre
+        selectedCategory = workInformation.category
     }
     
     func save() {
@@ -43,6 +45,7 @@ struct ModifiableUserWorkInformationPage: View {
         workInformation.type = selectedType
         workInformation.status = selectedStatus
         workInformation.genre = selectedGenres
+        workInformation.category = selectedCategory
     }
     
     var body: some View {
@@ -55,6 +58,7 @@ struct ModifiableUserWorkInformationPage: View {
                 DropList(selectedOption: $selectedTeam, options: TEAMS)
                 MyTextField(title: "URL of the work", isNumPad: false, text: $urlWork)
                 DropList(selectedOption: $selectedType, options: TYPES)
+                DropList(selectedOption: $selectedCategory, options: CATEGORIES)
                 DropList(selectedOption: $selectedStatus, options: STATUSES)
                 DropListSelectorButton(selectedOption: $selectedGenres, options: GENRES, title: "Select genres")
 //                ImagePicker(title: "Select an Image", imageData: $selectedImage)

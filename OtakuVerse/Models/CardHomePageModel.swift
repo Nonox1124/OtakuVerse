@@ -10,8 +10,8 @@ import SwiftUI
 struct CardHomePageModel: View {
     
     @ObservedObject var navigationController: NavigationController
+    @Binding var works: [UserWorkGetResponse]
     @Binding var workInformation: UserWorkGetResponse
-    let index: Int
     
     @State private var size: CGSize = .zero
     
@@ -52,7 +52,7 @@ struct CardHomePageModel: View {
                     }
                     .font(.system(size: 10))
                     Button("Read") {
-                        if (workInformation.current_chapter + 1 < workInformation.number_of_chapters) {
+                        if (workInformation.current_chapter + 1 <= workInformation.number_of_chapters) {
                             workInformation.current_chapter += 1
                         }
                     }
@@ -66,6 +66,7 @@ struct CardHomePageModel: View {
                 VStack {
                     HStack {
                         Button(action: {
+                            let index: Int = self.works.firstIndex(of: self.workInformation)!
                             navigationController.navigateToSecondaryDestination(SecondaryDestination.userWorkInformation(index))
                         }) {
                             Image(systemName: "info.circle.fill")
@@ -87,7 +88,10 @@ struct CardHomePageModel: View {
                     }
                     Spacer().frame(height: self.size.height / 6)
                     Button(action: {
-                        print("Trash")
+                        let index: Int = self.works.firstIndex(of: self.workInformation)!
+                        if works.indices.contains(index) {
+                            works.remove(at: index)
+                        }
                     }) {
                         Image(systemName: "trash")
                     }

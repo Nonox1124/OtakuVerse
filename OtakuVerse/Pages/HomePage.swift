@@ -10,16 +10,53 @@ import SwiftUI
 struct HomePage: View {
     
     @ObservedObject var navigationController: NavigationController
+    @Binding var works: [UserWorkGetResponse]
     
     @State private var searchText: String = ""
-    @Binding var works: [UserWorkGetResponse]
+    @State private var selectedItem: [SearchableType: String] = [:]
+    
+    var searchableWorks: [UserWorkGetResponse] {
+        var filteredWorks: [UserWorkGetResponse] = []
+        filteredWorks = works.filter { !searchText.isEmpty ? ($0.title.lowercased().contains(searchText.lowercased())) : true }
+        if let selectedAuthor = selectedItem[.author] {
+            filteredWorks = filteredWorks.filter { $0.author == selectedAuthor }
+        }
+        if let selectedCategory = selectedItem[.category] {
+            filteredWorks = filteredWorks.filter { $0.category == selectedCategory }
+        }
+        if let selectedGenre = selectedItem[.genre] {
+            filteredWorks = filteredWorks.filter { $0.genre == selectedGenre }
+        }
+        if let selectedStatus = selectedItem[.status] {
+            filteredWorks = filteredWorks.filter { $0.status == selectedStatus }
+        }
+        return filteredWorks
+    }
+    
+    private var totalWorks: Int {
+        return works.count
+    }
+    
+    private var totalChapters: Int {
+        let allChapters: [Int] = works.map(\.self.number_of_chapters)
+        return allChapters.reduce(0, +)
+    }
+    
+    private var totalUnreadChapters: Int {
+        let allChapters: [Int] = works.map(\.self.number_of_chapters)
+        let allCurrentChapters: [Int] = works.map(\.self.current_chapter)
+        let totalUnread: [Int] = zip(allChapters, allCurrentChapters).map(-)
+        return totalUnread.reduce(0, +)
+    }
     
     var body: some View {
         ZStack {
             Color.darkBlue.ignoresSafeArea()
             ScrollView {
-                ForEach(self.works.indices, id: \.self) { index in
-                    CardHomePageModel(navigationController: navigationController, workInformation: $works[index], index: index)
+                ForEach(self.searchableWorks, id: \.self) { work in
+                    if let index = works.firstIndex(where: { $0.id_of_work == work.id_of_work }) {
+                        CardHomePageModel(navigationController: navigationController, works: $works, workInformation: $works[index])
+                    }
                 }
             }
         }
@@ -27,14 +64,11 @@ struct HomePage: View {
             AnyView(
                 Group {
                     Menu("Information", systemImage: "info.circle") {
-                        Text("Total works: 2")
-                        Text("Total chapters: 300")
-                        Text("Total unread chapters: 50")
+                        Text("Total works: \(totalWorks)")
+                        Text("Total chapters: \(totalChapters)")
+                        Text("Total unread chapters: \(totalUnreadChapters)")
                     }
-                    Menu("Filters", systemImage: "line.3.horizontal.decrease.circle") {
-                        Text("Filter 1")
-                        Text("Filter 2")
-                    }
+                    DropFilterButton(selectedItems: $selectedItem)
                 }
             )
         }

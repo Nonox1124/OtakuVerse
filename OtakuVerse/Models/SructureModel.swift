@@ -8,6 +8,35 @@
 import SwiftUICore
 import SwiftUI
 
+let TEAMS: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+
+var STATUSES: [String] {
+    let statuses: [String] = BookStatus.allCases.map(\.rawValue)
+    return statuses.sorted()
+}
+
+var GENRES: [String] {
+    let genres: [String] = ["Action", "Adventure", "Comedy", "Detective", "Drama", "Fantasy", "Harem",
+                            "Historical", "Horror", "Mystery", "Psychological", "Romance", "Returner",
+                            "Sci-fi", "Slice of Life", "Supernatural", "Thriller", "Tragedy",
+                            "Isekai", "Magical", "Martial Arts", "Mecha", "Military", "Music", "Parody",
+                            "School Life", "Sports", "Super Power", "Vampire", "Ecchi",
+                            "Medical", "Monster", "Time Travel", "Revenge", "Romance Comedy",
+                            "Surnatural", "Sport", "Spy", "War", "Superhero", "Fight",
+                            "Dungeon", "Reincarnation"]
+    return genres.sorted()
+}
+
+var TYPES: [String] {
+    let types: [String] = ["Manga", "Novel", "Webtoon", "Manhwa", "Manhua", "One Shot"]
+    return types.sorted()
+}
+
+var CATEGORIES: [String] {
+    let categories: [String] = ["Shōnen", "Shōjo", "Seinen", "Josei", "Kodomo", "Shōnen Ai", "Yaoi"]
+    return categories.sorted()
+}
+
 struct UserWorkGetResponse: Hashable {
     var id_of_work: Int
     var title: String
@@ -92,6 +121,14 @@ enum SecondaryDestination: Hashable {
     case userWorkInformation(Int)
     case modifyUserWork(Int)
     case workInformation(Int)
+}
+
+enum SearchableType: String, CaseIterable {
+    case author = "Author"
+    case category = "Category"
+    case genre = "Genre"
+    case status = "Status"
+    case type = "Type"
 }
 
 class NavigationController: ObservableObject {

@@ -11,7 +11,7 @@ struct ContentView: View {
     @StateObject private var navigationController = NavigationController()
     
     @State private var works: [UserWorkGetResponse] = []
-    @State private var worksSearch: [WorkGetResponse] = [WorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "Hiroyuki Takei", status: "On Going", synopsis: "This is a synopsis", number_of_chapters: 200, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", url: "https://www.google.com", image_url: "https://www.google.com"), WorkGetResponse(id_of_work: 2, title: "Salut les gens, je m'appelle Yuki", author: "Hiroyuki Takei", status: "Completed", synopsis: "This is a synopsis", number_of_chapters: 100, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", url: "https://www.google.com", image_url: "https://www.google.com")]
+    @State private var worksSearch: [WorkGetResponse] = [WorkGetResponse(id_of_work: 1, title: "Solo Leveling", author: "A", status: "On Going", synopsis: "This is a synopsis", number_of_chapters: 200, type: "Webtoon", category: "Shonen", genre: "Action - Fantasy - Adventure", url: "https://www.google.com", image_url: "https://www.google.com"), WorkGetResponse(id_of_work: 2, title: "Salut les gens, je m'appelle Yuki", author: "B", status: "Completed", synopsis: "This is a synopsis", number_of_chapters: 100, type: "Webtoon", category: "Shonen", genre: "Action", url: "https://www.google.com", image_url: "https://www.google.com"),WorkGetResponse(id_of_work: 3, title: "Salut les gens", author: "c", status: "Completed", synopsis: "This is a synopsis", number_of_chapters: 100, type: "Manga", category: "Shonen", genre: "Action", url: "https://www.google.com", image_url: "https://www.google.com")]
 
     var body: some View {
         NavigationStack(path: $navigationController.path) {
@@ -24,7 +24,7 @@ struct ContentView: View {
                 case .author:
                     AuthorPage(navigationController: navigationController)
                 case .research:
-                    SearchPage(navigationController: navigationController, worksSearch: $worksSearch)
+                    SearchPage(navigationController: navigationController, works: $worksSearch)
                 case .workCreation:
                     WorkCreationPage(navigationController: navigationController)
                 case .logIn:
