@@ -36,7 +36,7 @@ func deleteFromTable(tableName, condition string, variables ...any) error {
     }
     defer stmt.Close()
 
-    _, err = stmt.Exec(variables)
+    _, err = stmt.Exec(variables...)
     if err != nil {
         return errors.New("deleteFromTable: Failed to delete" + err.Error())
     }
