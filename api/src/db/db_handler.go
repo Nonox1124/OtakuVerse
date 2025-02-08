@@ -5,8 +5,18 @@ import (
 	"database/sql"
 	"fmt"
 
+    "otakuverse-api/src/const"
     "otakuverse-api/src/utils"
 )
+
+func isValidTable(table string) bool {
+	for _, allowedTable := range constants.ALLOWED_TABLES {
+		if allowedTable == table {
+			return true
+		}
+	}
+	return false
+}
 
 func getPostgresInfos() string {
 	conf := utils.GetConfig().Database
