@@ -14,7 +14,10 @@ func InsertNewWorks(newWork openapi.Work) error {
 	}
 	defer db.Close()
 
-	err = insertIntoTable(constants.WORKS_TABLE, constants.WORKS_VALUES, newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis, newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre, newWork.Url, newWork.ImageUrl)
+	err = insertIntoTable(constants.WORKS_TABLE, constants.WORKS_VALUES,
+		newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis,
+		newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre,
+		newWork.Url, newWork.ImageUrl)
 	if err != nil {
 		return errors.New("InsertNewWorks: " + err.Error())
 	}
@@ -23,7 +26,8 @@ func InsertNewWorks(newWork openapi.Work) error {
 
 func insertIntoTable(tableName, tableContent string, variables ...any) error {
 	if tableName == "" || tableContent == "" {
-		return errors.New("insertIntoTable: Missing informations. tableName: '" + tableName + "' tableContent: '" + tableContent + "'")
+		return errors.New("insertIntoTable: Missing informations. tableName: '" +
+		tableName + "' tableContent: '" + tableContent + "'")
 	}
 	db, err := OpenDB()
 
@@ -34,7 +38,7 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 
 	request := "INSERT INTO " + tableName + " " + tableContent + " VALUES ("
 
-	values := FormatArgumentString(variables)
+	values := FormatArgumentString(variables...)
 	if values == "" {
 		return errors.New("insertIntoTable: No variables were passed.")
 	}
@@ -45,12 +49,12 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 	}
 	defer stmt.Close()
 
-	interfaceVariables := make([]interface{}, len(variables))
-	for i, v := range variables {
-		interfaceVariables[i] = v
-	}
+	// interfaceVariables := make([]interface{}, len(variables))
+	// for i, v := range variables {
+	// 	interfaceVariables[i] = v
+	// }
 
-	_, err = stmt.Exec(interfaceVariables...)
+	_, err = stmt.Exec(variables...)
 	if err != nil {
 		return errors.New("Failed to insert:" + err.Error())
 	}
