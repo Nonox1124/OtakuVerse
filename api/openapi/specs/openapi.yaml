@@ -115,6 +115,7 @@ paths:
                 - id_of_work
                 - current_chapter
                 - appreciate_book
+                - last_read
               properties:
                 id_of_work:
                   type: integer
@@ -125,6 +126,9 @@ paths:
                 appreciate_book:
                   type: integer
                   example: 0
+                last_read:
+                  type: string
+                  example: '22:03_2021-01-01'
       responses:
         '200':
           shema:
@@ -167,6 +171,7 @@ paths:
               required:
                 - current_chapter
                 - appreciate_book
+                - last_read
               properties:
                 current_chapter:
                   type: integer
@@ -174,6 +179,9 @@ paths:
                 appreciate_book:
                   type: integer
                   example: 1
+                last_read:
+                  type: string
+                  example: '22:03_2021-01-01'
       responses:
         '200':
           shema:
@@ -517,3 +525,6 @@ components:
               image_url:
                 type: string
                 example: 'https://www.ger.com'
+              last_read:
+                type: string
+                example: '22:03_2021-01-01'
