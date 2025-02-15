@@ -37,26 +37,29 @@ func GetAuthors() ([]openapi.Work, error) {
 	return authors, nil
 }
 
-func GetWorks(variables ...string) ([]openapi.Work, error) {
+func GetWorks(variables ...string) ([]openapi.WorkInformation, error) {
     db, err := OpenDB()
     if err != nil {
         return nil, err
     }
     defer db.Close()
 
-    rows, err := getFromTable(constants.WORKS_TABLE, "id=?", variables)
+    vars := make([]any, len(variables))
+    for i, v := range variables {
+        vars[i] = "%" + v + "%"
+    }
+    rows, err := getFromTable(constants.WORKS_TABLE, "title ILIKE $1", vars...)
     if err != nil {
         return nil, errors.New("GetWorks: " + err.Error())
     }
 
     defer rows.Close()
-
-	works := []openapi.Work{}
+	works := []openapi.WorkInformation{}
 	for rows.Next() {
-		work := openapi.Work{}
-		err := rows.Scan(&work.Author, &work.Category, &work.Genre, &work.ImageUrl,
-            &work.NumberOfChapters, &work.Status, &work.Synopsis, &work.Title,
-            &work.Type, &work.Url,
+		work := openapi.WorkInformation{}
+		err := rows.Scan(&work.Id, &work.Title, &work.Author, &work.Status,
+            &work.Synopsis, &work.NumberOfChapters, &work.Type,
+            &work.Category, &work.Genre, &work.Url, &work.ImageUrl,
         )
 		if err != nil {
             return nil, errors.New("GetWorks: fail to scan work: " + err.Error())
@@ -67,7 +70,7 @@ func GetWorks(variables ...string) ([]openapi.Work, error) {
 }
 
 func getFromTable(tableName, condition string, variables ...any) (*sql.Rows, error) {
-    query := "SELECT "
+    query := "SELECT * FROM " + tableName
     if (tableName != "" && condition == "") || (tableName == "" && condition != "") {
         return nil, errors.New("getFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
     }
@@ -76,14 +79,12 @@ func getFromTable(tableName, condition string, variables ...any) (*sql.Rows, err
         return nil, err
     }
     defer db.Close()
-    if tableName == "" {
-        query += "* FROM " + tableName
-    } else {
-        query += "FROM " + tableName + " WHERE " + condition + " LIMITE 5"
+
+    if tableName != "" {
+        query += " WHERE " + condition
     }
-
-
-    rows, err := db.Query(query, variables)
+    query += " LIMIT 5"
+    rows, err := db.Query(query, variables...)
     if err != nil {
         return nil, errors.New("getFromTable: Failed to execute the query:" + err.Error())
     }
