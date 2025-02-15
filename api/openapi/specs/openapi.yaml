@@ -19,7 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
           $ref: '#/components/responses/Token'
@@ -34,7 +34,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
           $ref: '#/components/responses/Token'
@@ -49,7 +49,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
           shema:
@@ -68,18 +68,8 @@ paths:
         description: Credentials of the user
         content:
           application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - password
-              properties:
-                email:
-                  type: string
-                  example: 'roger.rubber@plouf.pf'
-                password:
-                  type: string
-                  example: 'password'
+            schemas:
+              $ref: '#/components/schemas/Credentials'
       responses:
         '200':
           $ref: '#/components/responses/Token'
@@ -91,17 +81,15 @@ paths:
         - user
       parameters:
         - $ref: '#/components/parameters/username'
-
       responses:
         '200':
           $ref: '#/components/responses/UserWork'
-  /user/{username}/work/{id_of_book}:
+  /user/{username}/work:
     post:
       summary: Add a work to the user's list
       operationId: PostUserWork
       parameters:
         - $ref: '#/components/parameters/username'
-        - $ref: '#/components/parameters/id_of_book'
       tags:
         - user
       requestBody:
@@ -110,25 +98,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - id_of_work
-                - current_chapter
-                - appreciate_book
-                - last_read
-              properties:
-                id_of_work:
-                  type: integer
-                  example: 1
-                current_chapter:
-                  type: integer
-                  example: 100
-                appreciate_book:
-                  type: integer
-                  example: 0
-                last_read:
-                  type: string
-                  example: '22:03_2021-01-01'
+              $ref: '#/components/schemas/UserWork'
       responses:
         '200':
           shema:
@@ -142,9 +112,15 @@ paths:
       operationId: DeleteUserWork
       parameters:
         - $ref: '#/components/parameters/username'
-        - $ref: '#/components/parameters/id_of_book'
       tags:
         - user
+      requestBody:
+        required: true
+        description: Id of the work
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkUser'
       responses:
         '200':
           shema:
@@ -158,7 +134,6 @@ paths:
       operationId: PatchUserWork
       parameters:
         - $ref: '#/components/parameters/username'
-        - $ref: '#/components/parameters/id_of_book'
       tags:
         - user
       requestBody:
@@ -167,21 +142,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - current_chapter
-                - appreciate_book
-                - last_read
-              properties:
-                current_chapter:
-                  type: integer
-                  example: 100
-                appreciate_book:
-                  type: integer
-                  example: 1
-                last_read:
-                  type: string
-                  example: '22:03_2021-01-01'
+              $ref: '#/components/schemas/UserWork'
       responses:
         '200':
           shema:
@@ -204,13 +165,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - username
-              properties:
-                username:
-                  type: string
-                  example: 'Toko'
+              $ref: '#/components/schemas/Username'
       responses:
         '200':
           $ref: '#/components/responses/Work'
@@ -300,13 +255,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - name
-              properties:
-                name:
-                  type: string
-                  example: 'Chugong'
+              $ref: '#/components/schemas/AuthorName'
       responses:
         '200':
           schema:
@@ -326,13 +275,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - name
-              properties:
-                name:
-                  type: string
-                  example: 'Chugong'
+              $ref: '#/components/schemas/AuthorName'
       responses:
         '200':
           shema:
@@ -350,8 +293,8 @@ components:
       description: username
       schema:
         type: string
-    id_of_book:
-      name: id_of_book
+    id_of_work:
+      name: id_of_work
       in: path
       required: true
       description: The ID of the book
@@ -374,7 +317,7 @@ components:
         type: integer
         minimum: 0
   schemas:
-    Credentials:
+    UserProfile:
       type: object
       required:
         - email
@@ -390,6 +333,19 @@ components:
         username:
           type: string
           example: 'Roger'
+    Credentials:
+      type: object
+      required:
+        - email
+        - username
+        - password
+      properties:
+        email:
+          type: string
+          example: 'roger.rubber@plouf.pf'
+        password:
+          type: string
+          example: 'password'
     Work:
       type: object
       required:
@@ -434,6 +390,50 @@ components:
         image_url:
           type: string
           example: 'https://www.ger.com'
+    UserWork:
+      type: object
+      required:
+        - id_of_work
+        - current_chapter
+        - appreciate_book
+        - last_read
+      properties:
+        id_of_work:
+          type: integer
+          example: 1
+        current_chapter:
+          type: integer
+          example: 100
+        appreciate_book:
+          type: integer
+          example: 1
+        last_read:
+          type: string
+          example: '22:03_2021-01-01'
+    DeleteWorkUser:
+      type: object
+      required:
+        - id_of_work
+      properties:
+        id_of_work:
+          type: integer
+          example: 1
+    Username:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          example: 'Toko'
+    AuthorName:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: 'Chugong'
   responses:
     Token:
       description: Token of the user
