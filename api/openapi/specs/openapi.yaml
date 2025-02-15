@@ -98,7 +98,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserWork'
+              $ref: '#/components/schemas/UserWorkTable'
       responses:
         '200':
           shema:
@@ -142,7 +142,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserWork'
+              $ref: '#/components/schemas/UserWorkTable'
       responses:
         '200':
           shema:
@@ -168,7 +168,7 @@ paths:
               $ref: '#/components/schemas/Username'
       responses:
         '200':
-          $ref: '#/components/responses/Work'
+          $ref: '#/components/responses/WorkInformation'
   /works/{id}:
     delete:
       summary: Delete the work and delete in the user's table
@@ -285,37 +285,6 @@ paths:
                 type: string
                 example: 'Ok'
 components:
-  parameters:
-    username:
-      name: username
-      in: path
-      required: true
-      description: username
-      schema:
-        type: string
-    id_of_work:
-      name: id_of_work
-      in: path
-      required: true
-      description: The ID of the book
-      schema:
-        type: integer
-        minimum: 0
-    title:
-      name: title
-      in: path
-      required: true
-      description: title of the book
-      schema:
-        type: string
-    id:
-      name: id
-      in: path
-      required: true
-      description: ID
-      schema:
-        type: integer
-        minimum: 0
   schemas:
     UserProfile:
       type: object
@@ -358,7 +327,7 @@ components:
         - category
         - genre
         - url
-        - image_url
+        - image_uri
       properties:
         title:
           type: string
@@ -390,7 +359,7 @@ components:
         image_url:
           type: string
           example: 'https://www.ger.com'
-    UserWork:
+    UserWorkTable:
       type: object
       required:
         - id_of_work
@@ -419,13 +388,8 @@ components:
           type: integer
           example: 1
     Username:
-      type: object
-      required:
-        - username
-      properties:
-        username:
-          type: string
-          example: 'Toko'
+      type: string
+      example: 'Toko'
     AuthorName:
       type: object
       required:
@@ -445,7 +409,7 @@ components:
               token:
                 type: string
                 example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
-    Work:
+    WorkInformation:
       description: All of the work's informations
       content:
         application/json:
@@ -528,3 +492,34 @@ components:
               last_read:
                 type: string
                 example: '22:03_2021-01-01'
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      description: username
+      schema:
+        $ref: '#/components/schemas/Username'
+    id_of_work:
+      name: id_of_work
+      in: path
+      required: true
+      description: The ID of the book
+      schema:
+        type: integer
+        minimum: 0
+    title:
+      name: title
+      in: path
+      required: true
+      description: title of the book
+      schema:
+        type: string
+    id:
+      name: id
+      in: path
+      required: true
+      description: ID
+      schema:
+        type: integer
+        minimum: 0
