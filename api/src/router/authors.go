@@ -14,7 +14,7 @@ func HelperGetAuthors(c *gin.Context) {
     if err != nil {
         c.IndentedJSON(
             http.StatusInternalServerError,
-            err,
+            err.Error(),
         )
         return
     }

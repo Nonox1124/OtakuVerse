@@ -14,7 +14,7 @@ func HelperGetWorks(c *gin.Context, name string) {
     if err != nil {
         c.IndentedJSON(
             http.StatusInternalServerError,
-            err,
+            err.Error(),
         )
         return
     }
@@ -29,7 +29,7 @@ func HelperDeleteWork(c *gin.Context, id int) {
     if err != nil {
         c.IndentedJSON(
             http.StatusInternalServerError,
-            err,
+            err.Error(),
         )
         return
     }
@@ -48,7 +48,7 @@ func HelperPostWork(c *gin.Context) {
     if err != nil {
         c.IndentedJSON(
             http.StatusInternalServerError,
-            err,
+            err.Error(),
         )
         return
     }
@@ -56,4 +56,8 @@ func HelperPostWork(c *gin.Context) {
         http.StatusOK,
         "",
     )
+}
+
+func HelperPatchWork(c *gin.Context, workID openapi.Id) {
+    // non implemented func
 }
