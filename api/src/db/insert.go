@@ -49,11 +49,6 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 	}
 	defer stmt.Close()
 
-	// interfaceVariables := make([]interface{}, len(variables))
-	// for i, v := range variables {
-	// 	interfaceVariables[i] = v
-	// }
-
 	_, err = stmt.Exec(variables...)
 	if err != nil {
 		return errors.New("Failed to insert:" + err.Error())
