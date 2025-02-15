@@ -443,6 +443,12 @@ components:
               genre:
                 type: string
                 example: Action-Fantasy-Adventure
+              url:
+                type: string
+                example: https://www.ger.com
+              image_url:
+                type: string
+                example: https://www.ger.com
     UserWork:
       description: All of the user's work's informations
       content:

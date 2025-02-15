@@ -4,6 +4,7 @@ go 1.23.1
 
 require (
 	github.com/gin-gonic/gin v1.10.0
+	github.com/lib/pq v1.10.9
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/spf13/viper v1.19.0
 )
