@@ -9,38 +9,51 @@ import SwiftUI
 
 struct ToolBarModel: ViewModifier {
     
-    @State var currentPage: String
+    @ObservedObject var navigationController: NavigationController
+    
+    var extraToolbar: () -> AnyView
     
     func body(content: Content) -> some View {
         content
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu("Menu", systemImage: "line.3.horizontal.circle") {
-                        NavigationLink("Home Page", destination: HomePage(currentPage: "HomePage")).disabled(currentPage == "HomePage")
-                        NavigationLink("Search Page", destination: SearchPage(currentPage: "SearchPage")).disabled(currentPage == "SearchPage")
+                        Button("Home Page") {
+                            navigationController.navigateToDestination(Destination.home)
+                        }
+                        .disabled(navigationController.oldDestination == Destination.home)
+                        Button("Search Page") {
+                            navigationController.navigateToDestination(Destination.research)
+                        }
+                        .disabled(navigationController.oldDestination == Destination.research)
+                        Button("Create Work Page") {
+                            navigationController.navigateToDestination(Destination.workCreation)
+                        }
+                        .disabled(navigationController.oldDestination == Destination.workCreation)
+                        Button("Author Page") {
+                            navigationController.navigateToDestination(Destination.author)
+                        }
+                        .disabled(navigationController.oldDestination == Destination.author)
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu("Filters", systemImage: "line.3.horizontal.decrease.circle") {
-                        Text("Filter 1")
-                        Text("Filter 2")
-                    }
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    extraToolbar()
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: LogInPage()) {
-                        Label("User Account Button", systemImage: "person.crop.circle")
+                    Button(action: {
+                        navigationController.navigateToDestination(Destination.logIn)
+                    }) {
+                        Image(systemName: "person.crop.circle")
                     }
-//                    Button("User Account Button", systemImage: "person.crop.circle") {
-//                        print("User Page")
-//                    }
                 }
             }
     }
 }
 
 extension View {
-    func withToolBarModel(currentPage: String) -> some View {
-        self.modifier(ToolBarModel(currentPage: currentPage))
+    func withToolBarModel(navigationController: ObservedObject<NavigationController>, @ViewBuilder extraToolbar: @escaping () -> AnyView = { AnyView(EmptyView()) }) -> some View {
+        self.modifier(ToolBarModel(navigationController: navigationController.wrappedValue, extraToolbar: extraToolbar))
     }
 }
+
 

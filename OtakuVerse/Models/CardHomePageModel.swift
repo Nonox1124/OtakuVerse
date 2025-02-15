@@ -9,7 +9,16 @@ import SwiftUI
 
 struct CardHomePageModel: View {
     
+    @ObservedObject var navigationController: NavigationController
+    @Binding var works: [UserWorkGetResponse]
+    @Binding var workInformation: UserWorkGetResponse
+    
     @State private var size: CGSize = .zero
+    
+    var progression: Float {
+        let progression: Float = Float(workInformation.current_chapter) / Float(workInformation.number_of_chapters)
+        return progression
+    }
     
     var body: some View {
         ZStack {
@@ -21,35 +30,44 @@ struct CardHomePageModel: View {
                     .frame(width: 100)
                 Spacer().frame(width: self.size.width / 10)
                 VStack {
-                    Text("Name")
+                    Text(workInformation.title)
                         .foregroundStyle(Color.black)
                         .bold()
-                    Text("Genres")
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                    Text(workInformation.genre)
                         .foregroundStyle(Color.black)
                         .font(.system(size: 10))
-                    Text("10 / 80")
+                        .lineLimit(2)
+                        .truncationMode(.tail)
+                        .multilineTextAlignment(.center)
+                    Text("\(workInformation.current_chapter) / \(workInformation.number_of_chapters)")
                         .foregroundStyle(Color.black)
                         .font(.system(size: 10))
-                    ProgressView(value: 0.1)
+                    ProgressView(value: progression)
                     Group {
                         Text("Status: ").foregroundStyle(Color.black) +
-                        Text("Ended").foregroundStyle(Color.red)
+                        Text(workInformation.status)
+                            .foregroundStyle(BookStatus(rawValue: workInformation.status)?.statusColor() ?? .gray)
                     }
                     .font(.system(size: 10))
                     Button("Read") {
-                        print("Read")
+                        if (workInformation.current_chapter + 1 <= workInformation.number_of_chapters) {
+                            workInformation.current_chapter += 1
+                        }
                     }
                     .foregroundStyle(Color.ligthPurple)
                     .tint(Color.paleLavender)
                     .controlSize(.small)
                     .buttonStyle(.borderedProminent)
                 }
-                .frame(width: self.size.width / 5)
+                .frame(width: self.size.width / 4.5)
                 Spacer().frame(width: self.size.width / 10)
                 VStack {
                     HStack {
                         Button(action: {
-                            print("Info")
+                            let index: Int = self.works.firstIndex(of: self.workInformation)!
+                            navigationController.navigateToSecondaryDestination(SecondaryDestination.userWorkInformation(index))
                         }) {
                             Image(systemName: "info.circle.fill")
                         }
@@ -57,16 +75,23 @@ struct CardHomePageModel: View {
                         .font(.system(size: 25))
                         Spacer().frame(width: self.size.width / 14)
                         Button(action: {
-                            print("Heart")
+                            if (workInformation.appreciate_book == AppreciatedBook.none.rawValue) {
+                                workInformation.appreciate_book = AppreciatedBook.like.rawValue
+                            } else {
+                                workInformation.appreciate_book = AppreciatedBook.none.rawValue
+                            }
                         }) {
-                            Image(systemName: "heart")
+                            Image(systemName: AppreciatedBook(rawValue: workInformation.appreciate_book)?.iconName() ?? "heart")
                         }
                         .foregroundStyle(Color.ligthPurple)
                         .font(.system(size: 25))
                     }
                     Spacer().frame(height: self.size.height / 6)
                     Button(action: {
-                        print("Trash")
+                        let index: Int = self.works.firstIndex(of: self.workInformation)!
+                        if works.indices.contains(index) {
+                            works.remove(at: index)
+                        }
                     }) {
                         Image(systemName: "trash")
                     }
@@ -77,14 +102,10 @@ struct CardHomePageModel: View {
             .padding()
         }
         .onGeometryChange(for: CGSize.self) { proxy in
-                    proxy.size
-                } action: {
-                    size = $0
-                }
+            proxy.size
+        } action: {
+            size = $0
+        }
         .frame(height: 200)
     }
-}
-
-#Preview {
-    CardHomePageModel()
 }
