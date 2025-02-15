@@ -9,8 +9,19 @@ import (
     "otakuverse-api/pkg/openapi"
 )
 
-func HelperGetWorks(c *gin.Context, username string) {
-    // non implemented func
+func HelperGetWorks(c *gin.Context, name string) {
+    worksInfos, err := db.GetWorks(name)
+    if err != nil {
+        c.IndentedJSON(
+            http.StatusInternalServerError,
+            err.Error(),
+        )
+        return
+    }
+    c.IndentedJSON(
+        http.StatusOK,
+        worksInfos,
+    )
 }
 
 func HelperDeleteWork(c *gin.Context, id int) {
@@ -18,7 +29,7 @@ func HelperDeleteWork(c *gin.Context, id int) {
     if err != nil {
         c.IndentedJSON(
             http.StatusInternalServerError,
-            err,
+            err.Error(),
         )
         return
     }
@@ -37,7 +48,7 @@ func HelperPostWork(c *gin.Context) {
     if err != nil {
         c.IndentedJSON(
             http.StatusInternalServerError,
-            err,
+            err.Error(),
         )
         return
     }
@@ -45,4 +56,8 @@ func HelperPostWork(c *gin.Context) {
         http.StatusOK,
         "",
     )
+}
+
+func HelperPatchWork(c *gin.Context, workID openapi.Id) {
+    // non implemented func
 }

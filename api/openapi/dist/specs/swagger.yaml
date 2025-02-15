@@ -19,7 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
           $ref: '#/components/responses/Token'
@@ -34,7 +34,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
           $ref: '#/components/responses/Token'
@@ -49,7 +49,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Credentials'
+              $ref: '#/components/schemas/UserProfile'
       responses:
         '200':
           shema:
@@ -68,7 +68,7 @@ paths:
         description: Credentials of the user
         content:
           application/json:
-            schema:
+            schemas:
               $ref: '#/components/schemas/Credentials'
       responses:
         '200':
@@ -83,56 +83,44 @@ paths:
         - $ref: '#/components/parameters/username'
       responses:
         '200':
-          description: List of works
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id_of_book:
-                      type: integer
-                      example: 1
-                    title:
-                      type: string
-                      example: Solo Leveling
-                    author:
-                      type: string
-                      example: Chugong
-                    status:
-                      type: string
-                      example: Ongoing
-                    synopsis:
-                      type: string
-                      example: This is a synopsis
-                    number_of_chapters:
-                      type: integer
-                      example: 200
-                    type:
-                      type: string
-                      example: Manga
-                    category:
-                      type: string
-                      example: Shonen
-                    genre:
-                      type: string
-                      example: Action-Fantasy-Adventure
-                    current_chapter:
-                      type: integer
-                      example: 100
-                    appreciate_book:
-                      type: integer
-                      example: Like
-  /user/{username}/work/{id_of_book}:
+          $ref: '#/components/responses/UserWork'
+  /user/{username}/work:
+    post:
+      summary: Add a work to the user's list
+      operationId: PostUserWork
+      parameters:
+        - $ref: '#/components/parameters/username'
+      tags:
+        - user
+      requestBody:
+        required: true
+        description: Id of the work, current chapter and the enum of appraciation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserWorkTable'
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
     delete:
       summary: Delete the work of the user
       operationId: DeleteUserWork
       parameters:
         - $ref: '#/components/parameters/username'
-        - $ref: '#/components/parameters/id_of_book'
       tags:
         - user
+      requestBody:
+        required: true
+        description: Id of the work
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteWorkUser'
       responses:
         '200':
           shema:
@@ -146,7 +134,6 @@ paths:
       operationId: PatchUserWork
       parameters:
         - $ref: '#/components/parameters/username'
-        - $ref: '#/components/parameters/id_of_book'
       tags:
         - user
       requestBody:
@@ -155,17 +142,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - current_chapter
-                - appreciate_book
-              properties:
-                current_chapter:
-                  type: integer
-                  example: 100
-                appreciate_book:
-                  type: integer
-                  example: Like
+              $ref: '#/components/schemas/UserWorkTable'
       responses:
         '200':
           shema:
@@ -182,11 +159,16 @@ paths:
         - works
       parameters:
         - $ref: '#/components/parameters/title'
+      requestBody:
+        required: true
+        description: The username of the user to don't show his works
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Username'
       responses:
         '200':
-          type: array
-          items:
-            $ref: '#/components/responses/Work'
+          $ref: '#/components/responses/WorkInformation'
   /works/{id}:
     delete:
       summary: Delete the work and delete in the user's table
@@ -195,6 +177,28 @@ paths:
         - works
       parameters:
         - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          shema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Ok
+    patch:
+      summary: Update the work
+      operationId: PatchWork
+      tags:
+        - works
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        description: Informations of the work
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Work'
       responses:
         '200':
           shema:
@@ -232,10 +236,14 @@ paths:
         - authors
       responses:
         '200':
-          type: array
-          items:
-            type: string
-            example: Chugong
+          description: List of authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: Chugong
     post:
       summary: Create a new author
       operationId: PostAuthor
@@ -247,13 +255,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - name
-              properties:
-                name:
-                  type: string
-                  example: Chugong
+              $ref: '#/components/schemas/AuthorName'
       responses:
         '200':
           schema:
@@ -273,13 +275,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - name
-              properties:
-                name:
-                  type: string
-                  example: Chugong
+              $ref: '#/components/schemas/AuthorName'
       responses:
         '200':
           shema:
@@ -289,39 +285,8 @@ paths:
                 type: string
                 example: Ok
 components:
-  parameters:
-    username:
-      name: username
-      in: path
-      required: true
-      description: username
-      schema:
-        type: string
-    id_of_book:
-      name: id_of_book
-      in: path
-      required: true
-      description: The ID of the book
-      schema:
-        type: integer
-        minimum: 1
-    title:
-      name: title
-      in: path
-      required: true
-      description: title of the book
-      schema:
-        type: string
-    id:
-      name: id
-      in: path
-      required: true
-      description: ID
-      schema:
-        type: integer
-        minimum: 1
   schemas:
-    Credentials:
+    UserProfile:
       type: object
       required:
         - email
@@ -337,6 +302,19 @@ components:
         username:
           type: string
           example: Roger
+    Credentials:
+      type: object
+      required:
+        - email
+        - username
+        - password
+      properties:
+        email:
+          type: string
+          example: roger.rubber@plouf.pf
+        password:
+          type: string
+          example: password
     Work:
       type: object
       required:
@@ -349,7 +327,7 @@ components:
         - category
         - genre
         - url
-        - image_url
+        - image_uri
       properties:
         title:
           type: string
@@ -381,6 +359,45 @@ components:
         image_url:
           type: string
           example: https://www.ger.com
+    UserWorkTable:
+      type: object
+      required:
+        - id_of_work
+        - current_chapter
+        - appreciate_book
+        - last_read
+      properties:
+        id_of_work:
+          type: integer
+          example: 1
+        current_chapter:
+          type: integer
+          example: 100
+        appreciate_book:
+          type: integer
+          example: 1
+        last_read:
+          type: string
+          example: 22:03_2021-01-01
+    DeleteWorkUser:
+      type: object
+      required:
+        - id_of_work
+      properties:
+        id_of_work:
+          type: integer
+          example: 1
+    Username:
+      type: string
+      example: Toko
+    AuthorName:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: Chugong
   responses:
     Token:
       description: Token of the user
@@ -392,7 +409,7 @@ components:
               token:
                 type: string
                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-    Work:
+    WorkInformation:
       description: All of the work's informations
       content:
         application/json:
@@ -426,3 +443,89 @@ components:
               genre:
                 type: string
                 example: Action-Fantasy-Adventure
+              url:
+                type: string
+                example: https://www.ger.com
+              image_url:
+                type: string
+                example: https://www.ger.com
+    UserWork:
+      description: All of the user's work's informations
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id_of_work:
+                type: integer
+                example: 1
+              title:
+                type: string
+                example: Solo Leveling
+              author:
+                type: string
+                example: Chugong
+              status:
+                type: string
+                example: Ongoing
+              synopsis:
+                type: string
+                example: This is a synopsis
+              number_of_chapters:
+                type: integer
+                example: 200
+              type:
+                type: string
+                example: Manga
+              category:
+                type: string
+                example: Shonen
+              genre:
+                type: string
+                example: Action-Fantasy-Adventure
+              current_chapter:
+                type: integer
+                example: 100
+              appreciate_book:
+                type: integer
+                example: 1
+              url:
+                type: string
+                example: https://www.ger.com
+              image_url:
+                type: string
+                example: https://www.ger.com
+              last_read:
+                type: string
+                example: 22:03_2021-01-01
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      description: username
+      schema:
+        $ref: '#/components/schemas/Username'
+    id_of_work:
+      name: id_of_work
+      in: path
+      required: true
+      description: The ID of the book
+      schema:
+        type: integer
+        minimum: 0
+    title:
+      name: title
+      in: path
+      required: true
+      description: title of the book
+      schema:
+        type: string
+    id:
+      name: id
+      in: path
+      required: true
+      description: ID
+      schema:
+        type: integer
+        minimum: 0

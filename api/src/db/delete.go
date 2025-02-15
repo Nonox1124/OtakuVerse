@@ -13,16 +13,16 @@ func DeleteWorks(workID int) error {
     }
     defer db.Close()
 
-    err = InsertIntoTable(constants.WORKS_TABLE, "id=?", )
+    err = deleteFromTable(constants.WORKS_TABLE, "id=?", )
     if err != nil {
         return errors.New("DeleteWorks: " + err.Error())
     }
     return nil
 }
 
-func DeleteFromTable(tableName, condition string, variables ...any) error {
+func deleteFromTable(tableName, condition string, variables ...any) error {
     if tableName == "" || condition == "" {
-        return errors.New("DeleteFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
+        return errors.New("deleteFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
     }
     db, err := OpenDB()
     if err != nil {
@@ -32,13 +32,13 @@ func DeleteFromTable(tableName, condition string, variables ...any) error {
 
     stmt, err := db.Prepare("DELETE FROM " + tableName + " WHERE " + condition)
     if err != nil {
-        return errors.New("DeleteFromTable: Failed to prepare statement:" + err.Error())
+        return errors.New("deleteFromTable: Failed to prepare statement:" + err.Error())
     }
     defer stmt.Close()
 
-    _, err = stmt.Exec(variables)
+    _, err = stmt.Exec(variables...)
     if err != nil {
-        return errors.New("DeleteFromTable: Failed to insert new works:" + err.Error())
+        return errors.New("deleteFromTable: Failed to delete" + err.Error())
     }
     return nil
 }
