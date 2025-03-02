@@ -28,7 +28,7 @@ func HelperPostCredentialsUser(c *gin.Context) {
     }
     c.IndentedJSON(
         http.StatusOK,
-        "",
+        "Add user token here",
     )
 }
 
