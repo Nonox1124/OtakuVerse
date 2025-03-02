@@ -10,8 +10,21 @@ import (
     "otakuverse-api/src/utils"
 )
 
-func isValidTable(table string) bool {
-	for _, allowedTable := range constants.AllowedTables {
+func isValidTable(table, tableName string) bool {
+	var allowedTables []string
+
+	switch tableName {
+		case constants.TableNameCredentials:
+			allowedTables = constants.AllowedTablesCredentials
+		case constants.TableNameGlobalWorks:
+			allowedTables = constants.AllowedTablesGlobalWorks
+		case constants.TableNameUserWorks:
+			return true // each user has its own table
+		default:
+			return false
+	}
+
+	for _, allowedTable := range allowedTables {
 		if allowedTable == table {
 			return true
 		}
@@ -19,14 +32,14 @@ func isValidTable(table string) bool {
 	return false
 }
 
-func getPostgresInfos() string {
+func getPostgresInfos(dbName string) string {
 	conf := utils.GetConfig().Database
 	return "host=" + conf.URI + " port=" + conf.Port + " user=" + conf.User +
-	" password=" + conf.Password + " dbname=" + conf.Name + " sslmode=disable"
+	" password=" + conf.Password + " dbname=" + dbName + " sslmode=disable"
 }
 
-func OpenDB() (sb *sql.DB, err error) {
-    db, err := sql.Open("postgres", getPostgresInfos())
+func OpenDB(dbName string) (*sql.DB, error) {
+    db, err := sql.Open("postgres", getPostgresInfos(dbName))
 	if err != nil {
 		return nil, err
 	}
