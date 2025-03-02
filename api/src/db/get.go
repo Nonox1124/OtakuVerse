@@ -9,7 +9,7 @@ import (
 )
 
 func GetAuthors() ([]openapi.Work, error) {
-    db, err := OpenDB()
+    db, err := OpenDB(constants.TableNameGlobalWorks)
     if err != nil {
         return nil, err
     }
@@ -38,7 +38,7 @@ func GetAuthors() ([]openapi.Work, error) {
 }
 
 func GetWorks(variables ...string) ([]openapi.WorkInformation, error) {
-    db, err := OpenDB()
+    db, err := OpenDB(constants.TableNameGlobalWorks)
     if err != nil {
         return nil, err
     }
@@ -74,7 +74,7 @@ func getFromTable(tableName, condition string, variables ...any) (*sql.Rows, err
     if (tableName != "" && condition == "") || (tableName == "" && condition != "") {
         return nil, errors.New("getFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
     }
-    db, err := OpenDB()
+    db, err := OpenDB(constants.TableNameGlobalWorks)
     if err != nil {
         return nil, err
     }

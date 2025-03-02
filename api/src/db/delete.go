@@ -1,36 +1,52 @@
 package db
 
 import (
-    "errors"
+	"errors"
+	// "database/sql"
 
-    "otakuverse-api/src/constants"
+	"otakuverse-api/pkg/openapi"
+	"otakuverse-api/src/constants"
 )
 
-func DeleteWorks(workID int) error {
-    db, err := OpenDB()
+func DeleteCredentials(credentials openapi.UserProfile) error {
+    db, err := OpenDB(constants.TableNameCredentials)
     if err != nil {
         return err
     }
     defer db.Close()
 
-    err = deleteFromTable(constants.WorksTable, "id=?", )
+    err = deleteFromTable(constants.UsersTable, constants.TableNameCredentials, "")
+    if err != nil {
+        return errors.New("DeleteCredentials: " + err.Error())
+    }
+    return nil
+}
+
+func DeleteWorks(workID int) error {
+    db, err := OpenDB(constants.TableNameGlobalWorks)
+    if err != nil {
+        return err
+    }
+    defer db.Close()
+
+    err = deleteFromTable(constants.WorksTable, constants.TableNameGlobalWorks, "id=?")
     if err != nil {
         return errors.New("DeleteWorks: " + err.Error())
     }
     return nil
 }
 
-func deleteFromTable(tableName, condition string, variables ...any) error {
-    if tableName == "" || condition == "" {
-        return errors.New("deleteFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
+func deleteFromTable(table, tableName, condition string, variables ...any) error {
+    if table == "" || tableName == "" || condition == "" {
+        return errors.New("deleteFromTable: Missing informations. table: '" + table + "' tableName: '"+ tableName + "' condition: '" + condition + "'")
     }
-    db, err := OpenDB()
+    db, err := OpenDB(tableName)
     if err != nil {
         return err
     }
     defer db.Close()
 
-    stmt, err := db.Prepare("DELETE FROM " + tableName + " WHERE " + condition)
+    stmt, err := db.Prepare("DELETE FROM " + table + " WHERE " + condition)
     if err != nil {
         return errors.New("deleteFromTable: Failed to prepare statement:" + err.Error())
     }
