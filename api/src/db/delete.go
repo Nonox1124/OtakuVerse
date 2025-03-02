@@ -7,7 +7,7 @@ import (
 )
 
 func DeleteWorks(workID int) error {
-    db, err := OpenDB()
+    db, err := OpenDB(constants.TableNameGlobalWorks)
     if err != nil {
         return err
     }
@@ -24,7 +24,7 @@ func deleteFromTable(tableName, condition string, variables ...any) error {
     if tableName == "" || condition == "" {
         return errors.New("deleteFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
     }
-    db, err := OpenDB()
+    db, err := OpenDB(constants.TableNameGlobalWorks)
     if err != nil {
         return err
     }

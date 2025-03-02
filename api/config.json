@@ -5,10 +5,9 @@
     "ListenAddr": "0.0.0.0",
     "ListenPort": "4242",
     "Database": {
-        "URI": "",
-        "Port": "",
-        "User": "",
-        "Name": "",
-        "Password": ""
+        "URI": "127.0.0.1",
+        "Port": "5432",
+        "User": "postgres",
+        "Password": "root"
     }
 }

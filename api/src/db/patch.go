@@ -9,7 +9,7 @@ import (
 )
 
 func UpdateWork(newWork openapi.Work, workID openapi.Id) error {
-	db, err := OpenDB()
+	db, err := OpenDB(constants.TableNameGlobalWorks)
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func updateDB(tableName, tableContent string, itemID int, variables ...any) erro
 		return errors.New("updateDB: Missing informations. tableName: '" +
 		tableName + "' tableContent: '" + tableContent + "'")
 	}
-	db, err := OpenDB()
+	db, err := OpenDB(constants.TableNameGlobalWorks)
 
 	if err != nil {
 		return err
