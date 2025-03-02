@@ -2,45 +2,43 @@ package db
 
 import (
     "errors"
-	"database/sql"
 
-    "otakuverse-api/pkg/openapi"
-    "otakuverse-api/src/utils"
-    "otakuverse-api/src/const"
+    "otakuverse-api/src/constants"
 )
 
-func DeleteWorks(workID int) err {
+func DeleteWorks(workID int) error {
     db, err := OpenDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
+    if err != nil {
+        return err
+    }
+    defer db.Close()
 
-    err := DeleteFromTable(WORKS_TABLE, "id = ?", Work)
-	if err != nil {
-		return errors.New("DeleteWorks: ", err)
-	}
+    err = deleteFromTable(constants.WorksTable, "id=?", )
+    if err != nil {
+        return errors.New("DeleteWorks: " + err.Error())
+    }
     return nil
 }
 
-func DeleteFromTable(tableName, conditions string, variables ...any) error {
-	if tableName == "" || conditions == "" {
-		return errors.New("DeleteFromTable: Missing informations. tableName: '" + tableName + "' tableContent: '" + tableContent + "'")
-	}
-	db, err := OpenDB()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
+func deleteFromTable(tableName, condition string, variables ...any) error {
+    if tableName == "" || condition == "" {
+        return errors.New("deleteFromTable: Missing informations. tableName: '" + tableName + "' condition: '" + condition + "'")
+    }
+    db, err := OpenDB()
+    if err != nil {
+        return err
+    }
+    defer db.Close()
 
-    stmt, err := db.Prepare("DELETE FROM " + tableName + " WHERE " + conditions)
-	if err != nil {
-		return errors.New("DeleteFromTable: Failed to prepare statement:", err)
-	}
-	defer stmt.Close()
+    stmt, err := db.Prepare("DELETE FROM " + tableName + " WHERE " + condition)
+    if err != nil {
+        return errors.New("deleteFromTable: Failed to prepare statement:" + err.Error())
+    }
+    defer stmt.Close()
 
-	_, err = stmt.Exec(variables)
-	if err != nil {
-		return errors.New("DeleteFromTable: Failed to insert new works:", err)
-	}
+    _, err = stmt.Exec(variables...)
+    if err != nil {
+        return errors.New("deleteFromTable: Failed to delete" + err.Error())
+    }
     return nil
+}

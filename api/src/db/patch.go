@@ -2,19 +2,20 @@ package db
 
 import (
 	"errors"
+	"strconv"
 
 	"otakuverse-api/pkg/openapi"
 	"otakuverse-api/src/constants"
 )
 
-func InsertNewWorks(newWork openapi.Work) error {
+func UpdateWork(newWork openapi.Work, workID openapi.Id) error {
 	db, err := OpenDB()
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	err = insertIntoTable(constants.WorksTable, constants.WorksValues,
+	err = updateDB(constants.WorksTable, constants.WorksQueryValues , workID,
 		newWork.Title, newWork.Author, newWork.Status, newWork.Synopsis,
 		newWork.NumberOfChapters, newWork.Type, newWork.Category, newWork.Genre,
 		newWork.Url, newWork.ImageUrl)
@@ -24,9 +25,9 @@ func InsertNewWorks(newWork openapi.Work) error {
 	return nil
 }
 
-func insertIntoTable(tableName, tableContent string, variables ...any) error {
+func updateDB(tableName, tableContent string, itemID int, variables ...any) error {
 	if tableName == "" || tableContent == "" {
-		return errors.New("insertIntoTable: Missing informations. tableName: '" +
+		return errors.New("updateDB: Missing informations. tableName: '" +
 		tableName + "' tableContent: '" + tableContent + "'")
 	}
 	db, err := OpenDB()
@@ -36,13 +37,13 @@ func insertIntoTable(tableName, tableContent string, variables ...any) error {
 	}
 	defer db.Close()
 
-	request := "INSERT INTO " + tableName + " " + tableContent + " VALUES ("
-
-	values := FormatArgumentString(variables...)
+	values := FormatPatchArgumentString(tableContent)
 	if values == "" {
 		return errors.New("insertIntoTable: No variables were passed.")
 	}
-	request += values + ")"
+	request := "UPDATE " + tableName + " SET " + values
+
+    request += " WHERE Id = " + strconv.Itoa(itemID)
 	stmt, err := db.Prepare(request)
 	if err != nil {
 		return errors.New("Failed to prepare statement:" + err.Error())
