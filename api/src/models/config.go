@@ -4,7 +4,6 @@ type DBInfos struct {
     URI                         string               `json:"URI"`
     Port                        string               `json:"Port"`
     User                        string               `json:"User"`
-    Name                        string               `json:"Name"`
     Password                    string               `json:"Password"`
 }
 
