@@ -4,13 +4,14 @@ import (
 	_ "github.com/lib/pq"
 	"database/sql"
 	"fmt"
+	"strings"
 
-    "otakuverse-api/src/const"
+    "otakuverse-api/src/constants"
     "otakuverse-api/src/utils"
 )
 
 func isValidTable(table string) bool {
-	for _, allowedTable := range constants.ALLOWED_TABLES {
+	for _, allowedTable := range constants.AllowedTables {
 		if allowedTable == table {
 			return true
 		}
@@ -44,4 +45,13 @@ func FormatArgumentString(args ...any) string {
 		index += 1
 	}
 	return formatedString
+}
+
+func FormatPatchArgumentString(arguments string) string {
+	var formatedContent []string
+	elemList := strings.Split(arguments, ", ")
+	for i, elem := range elemList {
+		formatedContent = append(formatedContent, fmt.Sprintf("%s=$%d", elem, i + 1))
+	}
+	return strings.Join(formatedContent, ", ")
 }
