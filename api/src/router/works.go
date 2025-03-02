@@ -59,5 +59,20 @@ func HelperPostWork(c *gin.Context) {
 }
 
 func HelperPatchWork(c *gin.Context, workID openapi.Id) {
-    // non implemented func
+    var newWork openapi.Work
+    err := c.BindJSON(&newWork)
+    if err == nil {
+        err = db.UpdateWork(newWork, workID)
+    }
+    if err != nil {
+        c.IndentedJSON(
+            http.StatusInternalServerError,
+            err.Error(),
+        )
+    } else {
+        c.IndentedJSON(
+            http.StatusOK,
+            "",
+        )
+    }
 }

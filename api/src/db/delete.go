@@ -13,7 +13,7 @@ func DeleteWorks(workID int) error {
     }
     defer db.Close()
 
-    err = deleteFromTable(constants.WORKS_TABLE, "id=?", )
+    err = deleteFromTable(constants.WorksTable, "id=?", )
     if err != nil {
         return errors.New("DeleteWorks: " + err.Error())
     }

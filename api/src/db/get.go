@@ -15,7 +15,7 @@ func GetAuthors() ([]openapi.Work, error) {
     }
     defer db.Close()
 
-    rows, err := getFromTable(constants.WORKS_TABLE, "")
+    rows, err := getFromTable(constants.WorksTable, "")
     if err != nil {
         return nil, errors.New("GetAuthors: " + err.Error())
     }
@@ -48,7 +48,7 @@ func GetWorks(variables ...string) ([]openapi.WorkInformation, error) {
     for i, v := range variables {
         vars[i] = "%" + v + "%"
     }
-    rows, err := getFromTable(constants.WORKS_TABLE, "title ILIKE $1", vars...)
+    rows, err := getFromTable(constants.WorksTable, "title ILIKE $1", vars...)
     if err != nil {
         return nil, errors.New("GetWorks: " + err.Error())
     }
